@@ -26,19 +26,26 @@ body {
 }
 
 .container {
-    max-width: 900px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
 }
 
 /* Header */
 header {
     text-align: center;
-    padding: 40px 20px;
+    padding: 30px 20px;
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     border-radius: var(--border-radius);
     color: white;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     box-shadow: var(--shadow-lg);
 }
 
@@ -66,8 +73,7 @@ header .description {
 section {
     background: var(--card-bg);
     border-radius: var(--border-radius);
-    padding: 30px;
-    margin-bottom: 20px;
+    padding: 25px;
     box-shadow: var(--shadow);
 }
 
@@ -92,7 +98,7 @@ section {
 
 /* Input Groups */
 .input-group {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .input-group:last-of-type {
@@ -177,24 +183,34 @@ section {
 }
 
 .slider-value {
-    min-width: 120px;
+    width: 130px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 6px;
+    justify-content: flex-end;
 }
 
 .editable-value {
-    width: 70px;
-    padding: 6px 10px;
-    font-size: 1.1rem;
+    width: 65px;
+    padding: 8px 10px;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--primary-dark);
-    border: 2px solid transparent;
+    border: 2px solid #e0e0e0;
     border-radius: 6px;
-    background: var(--background);
+    background: white;
     text-align: right;
     transition: border-color 0.2s ease, background 0.2s ease;
     -moz-appearance: textfield;
+}
+
+.slider-value .unit {
+    width: 55px;
+    text-align: left;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
 }
 
 .editable-value::-webkit-outer-spin-button,
@@ -213,11 +229,6 @@ section {
     background: white;
 }
 
-.slider-value .unit {
-    font-weight: 500;
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-}
 
 /* Range Slider Styling */
 input[type="range"] {
@@ -359,6 +370,7 @@ input[type="number"]:focus {
 
 /* Email Section */
 .email-section {
+    grid-column: 1 / -1;
     text-align: center;
 }
 
@@ -425,6 +437,16 @@ footer {
 }
 
 /* Responsive */
+@media (max-width: 900px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    .email-section {
+        grid-column: 1;
+    }
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 15px;
@@ -450,6 +472,11 @@ footer {
 
     input[type="range"] {
         width: 100%;
+    }
+
+    .slider-value {
+        width: auto;
+        justify-content: flex-start;
     }
 
     .results-grid {
