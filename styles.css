@@ -304,8 +304,6 @@ input[type="number"]:focus {
 
 /* Results Section */
 .results-section {
-    background: var(--gradient-main);
-    color: white;
     display: flex;
     flex-direction: column;
 }
@@ -315,14 +313,6 @@ input[type="number"]:focus {
     align-content: center;
 }
 
-.results-section .section-header {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
-}
-
-.results-section h2 {
-    color: white;
-}
-
 .results-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -330,22 +320,22 @@ input[type="number"]:focus {
 }
 
 .result-card {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--background);
     border-radius: 10px;
     padding: 14px;
-    backdrop-filter: blur(10px);
 }
 
 .result-card.highlight {
     grid-column: 1 / -1;
-    background: rgba(255, 255, 255, 0.25);
+    background: var(--primary-color);
+    color: white;
     text-align: center;
     padding: 18px;
 }
 
 .result-label {
     font-size: 0.85rem;
-    opacity: 0.9;
+    color: var(--text-secondary);
     margin-bottom: 4px;
     display: flex;
     align-items: center;
@@ -354,6 +344,7 @@ input[type="number"]:focus {
 
 .result-card.highlight .result-label {
     justify-content: center;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .result-value {
@@ -369,6 +360,11 @@ input[type="number"]:focus {
 .result-value span:first-child {
     font-size: 1.6rem;
     font-weight: 700;
+    color: var(--primary-color);
+}
+
+.result-card.highlight .result-value span:first-child {
+    color: white;
 }
 
 .result-value.large span:first-child {
@@ -377,7 +373,11 @@ input[type="number"]:focus {
 
 .result-unit {
     font-size: 1rem;
-    opacity: 0.9;
+    color: var(--text-secondary);
+}
+
+.result-card.highlight .result-unit {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 /* Actions Section */
