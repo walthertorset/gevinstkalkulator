@@ -25,9 +25,6 @@ const frigjorteTimer = document.getElementById('frigjorteTimer');
 const ukentligVerdi = document.getElementById('ukentligVerdi');
 const arligGevinst = document.getElementById('arligGevinst');
 
-// Email form
-const emailForm = document.getElementById('emailForm');
-const emailMessage = document.getElementById('emailMessage');
 
 // Format number with space as thousand separator (Norwegian format)
 function formatNumber(num) {
@@ -120,35 +117,6 @@ sliderPairs.forEach(({ slider, input }) => {
 // Event listener for timekostnad (number input only)
 timekostnad.addEventListener('input', calculate);
 
-// Email form handler
-emailForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const email = document.getElementById('email').value;
-    const results = {
-        brukere: antallBrukere.value,
-        besokPerUke: besokPerUke.value,
-        tidPerBesok: tidPerBesok.value,
-        digitaliseringsgrad: digitaliseringsgrad.value,
-        timekostnad: timekostnad.value,
-        erstattedeBesok: erstattedeBesok.textContent,
-        frigjorteTimer: frigjorteTimer.textContent,
-        ukentligVerdi: ukentligVerdi.textContent,
-        arligGevinst: arligGevinst.textContent
-    };
-
-    // In a real application, you would send this to a server
-    // For now, we'll just show a success message
-    console.log('Email:', email, 'Results:', results);
-
-    emailMessage.textContent = 'Resultatene ville blitt sendt til ' + email + ' (demo-modus)';
-    emailMessage.classList.remove('error');
-
-    // Clear message after 5 seconds
-    setTimeout(() => {
-        emailMessage.textContent = '';
-    }, 5000);
-});
 
 // PDF Export functionality
 document.getElementById('exportPdf').addEventListener('click', function() {
