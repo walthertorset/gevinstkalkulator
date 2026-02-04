@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gevinstkalkulator - Digitale Hjemmebesøk</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Digitale Hjemmebesøk</h1>
+            <p class="subtitle">Lønnsomhetskalkulator</p>
+            <p class="description">Kalkulatoren gir deg en indikasjon på årlig kostnadsbesparelser basert på dine forutsetninger</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <h2>Dine forutsetninger</h2>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <label for="antallBrukere">Antall brukere som mottar tjenesten</label>
+                        <button class="info-btn" data-tooltip="Totalt antall brukere/pasienter som mottar hjemmetjenester">i</button>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="antallBrukere" min="1" max="500" value="30">
+                        <div class="slider-value">
+                            <input type="number" id="antallBrukereValue" class="editable-value" value="30" min="1" max="500">
+                            <span class="unit">brukere</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <label for="besokPerUke">Antall fysiske besøk per bruker per uke</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig antall hjemmebesøk hver bruker får per uke">i</button>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="besokPerUke" min="1" max="21" value="3">
+                        <div class="slider-value">
+                            <input type="number" id="besokPerUkeValue" class="editable-value" value="3" min="1" max="21">
+                            <span class="unit">besøk</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <label for="tidPerBesok">Tidsbruk per fysisk besøk (minutter)</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig tid brukt på hvert fysiske hjemmebesøk, inkludert reisetid">i</button>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="tidPerBesok" min="5" max="120" step="5" value="30">
+                        <div class="slider-value">
+                            <input type="number" id="tidPerBesokValue" class="editable-value" value="30" min="5" max="120" step="5">
+                            <span class="unit">min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <label for="digitaliseringsgrad">Digitaliseringsgrad</label>
+                        <button class="info-btn" data-tooltip="Andel av besøkene som kan erstattes med digitale løsninger">i</button>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="digitaliseringsgrad" min="5" max="80" step="5" value="20">
+                        <div class="slider-value">
+                            <input type="number" id="digitaliseringsgradValue" class="editable-value" value="20" min="5" max="80" step="5">
+                            <span class="unit">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <label for="timekostnad">Kommunal timekostnad</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig timekostnad for kommunalt ansatte inkludert alle kostnader">i</button>
+                    </div>
+                    <div class="number-input-container">
+                        <input type="number" id="timekostnad" min="300" max="1500" value="600">
+                        <span class="currency">NOK</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="results-section">
+                <div class="section-header">
+                    <span class="section-icon">💰</span>
+                    <h2>Beregnet gevinst</h2>
+                </div>
+
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-label">Erstattede besøk per uke</div>
+                        <div class="result-value">
+                            <span id="erstattedeBesok">18</span>
+                            <span class="result-unit">besøk</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-label">
+                            Frigjorte timer per uke
+                            <button class="info-btn" data-tooltip="Timer som frigjøres til andre oppgaver hver uke">i</button>
+                        </div>
+                        <div class="result-value">
+                            <span id="frigjorteTimer">9</span>
+                            <span class="result-unit">timer</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-label">Ukentlig frigjort ressursverdi</div>
+                        <div class="result-value">
+                            <span id="ukentligVerdi">5 400</span>
+                            <span class="result-unit">NOK</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card highlight">
+                        <div class="result-label">
+                            Årlig økonomisk gevinst
+                            <button class="info-btn light" data-tooltip="Total estimert besparelse per år basert på dine forutsetninger">i</button>
+                        </div>
+                        <div class="result-value large">
+                            <span id="arligGevinst">280 800</span>
+                            <span class="result-unit">NOK</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="email-section">
+                <h3>Få tilsendt resultatene per epost</h3>
+                <form id="emailForm" class="email-form">
+                    <input type="email" id="email" placeholder="Din e-postadresse" required>
+                    <button type="submit">Send resultat</button>
+                </form>
+                <p id="emailMessage" class="email-message"></p>
+            </section>
+        </main>
+
+        <footer>
+            <p>Kalkulatoren gir et estimat basert på oppgitte verdier. Faktiske besparelser kan variere.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
