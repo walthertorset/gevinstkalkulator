@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gevinstkalkulator - Digitale Hjemmebesøk</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -136,13 +137,21 @@
                 </div>
             </section>
 
-            <section class="email-section">
-                <h3>Få tilsendt resultatene per epost</h3>
-                <form id="emailForm" class="email-form">
-                    <input type="email" id="email" placeholder="Din e-postadresse" required>
-                    <button type="submit">Send resultat</button>
-                </form>
-                <p id="emailMessage" class="email-message"></p>
+            <section class="actions-section">
+                <div class="action-buttons">
+                    <button id="exportPdf" class="action-btn pdf-btn">
+                        <span class="btn-icon">📄</span>
+                        Last ned som PDF
+                    </button>
+                </div>
+                <div class="email-wrapper">
+                    <h3>Få tilsendt resultatene per epost</h3>
+                    <form id="emailForm" class="email-form">
+                        <input type="email" id="email" placeholder="Din e-postadresse" required>
+                        <button type="submit">Send resultat</button>
+                    </form>
+                    <p id="emailMessage" class="email-message"></p>
+                </div>
             </section>
         </main>
 

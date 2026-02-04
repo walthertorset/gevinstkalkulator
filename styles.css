@@ -368,10 +368,58 @@ input[type="number"]:focus {
     opacity: 0.9;
 }
 
-/* Email Section */
-.email-section {
+/* Actions Section */
+.actions-section {
     grid-column: 1 / -1;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pdf-btn {
+    background: #2c3e50;
+    color: white;
+}
+
+.pdf-btn:hover:not(:disabled) {
+    background: #1a252f;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+}
+
+.pdf-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-icon {
+    font-size: 1.1rem;
+}
+
+.email-wrapper {
+    width: 100%;
+    max-width: 500px;
 }
 
 .email-section h3 {

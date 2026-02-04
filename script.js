@@ -150,6 +150,63 @@ emailForm.addEventListener('submit', function(e) {
     }, 5000);
 });
 
+// PDF Export functionality
+document.getElementById('exportPdf').addEventListener('click', function() {
+    const btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="btn-icon">⏳</span> Genererer PDF...';
+
+    // Create a clean version for PDF
+    const pdfContent = document.createElement('div');
+    pdfContent.innerHTML = `
+        <div style="font-family: 'Segoe UI', sans-serif; padding: 40px; max-width: 800px;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #4ECDC4; margin: 0;">Digitale Hjemmebesøk</h1>
+                <p style="color: #666; margin: 5px 0;">Lønnsomhetskalkulator - Resultat</p>
+                <p style="color: #999; font-size: 12px;">${new Date().toLocaleDateString('no-NO')}</p>
+            </div>
+
+            <div style="background: #f5f7fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h2 style="color: #2c3e50; font-size: 16px; margin: 0 0 15px 0;">Dine forutsetninger</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr><td style="padding: 8px 0; color: #666;">Antall brukere</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} brukere</td></tr>
+                    <tr><td style="padding: 8px 0; color: #666;">Besøk per bruker per uke</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} besøk</td></tr>
+                    <tr><td style="padding: 8px 0; color: #666;">Tid per besøk</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} minutter</td></tr>
+                    <tr><td style="padding: 8px 0; color: #666;">Digitaliseringsgrad</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}%</td></tr>
+                    <tr><td style="padding: 8px 0; color: #666;">Kommunal timekostnad</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} NOK</td></tr>
+                </table>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #4ECDC4, #3DB8B0); padding: 25px; border-radius: 8px; color: white;">
+                <h2 style="font-size: 16px; margin: 0 0 15px 0;">Beregnet gevinst</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr><td style="padding: 10px 0;">Erstattede besøk per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${erstattedeBesok.textContent} besøk</td></tr>
+                    <tr><td style="padding: 10px 0;">Frigjorte timer per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${frigjorteTimer.textContent} timer</td></tr>
+                    <tr><td style="padding: 10px 0;">Ukentlig frigjort ressursverdi</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${ukentligVerdi.textContent} NOK</td></tr>
+                    <tr style="border-top: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig økonomisk gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>
+                </table>
+            </div>
+
+            <p style="text-align: center; color: #999; font-size: 11px; margin-top: 30px;">
+                Kalkulatoren gir et estimat basert på oppgitte verdier. Faktiske besparelser kan variere.
+            </p>
+        </div>
+    `;
+
+    const opt = {
+        margin: 10,
+        filename: 'gevinstkalkulator-resultat.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(pdfContent).save().then(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<span class="btn-icon">📄</span> Last ned som PDF';
+    });
+});
+
 // Initialize on page load
 function init() {
     // Sync all slider-input pairs
