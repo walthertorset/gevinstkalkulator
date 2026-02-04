@@ -38,12 +38,14 @@ arligGevinst = ukentligVerdi × 52
 ```
 
 ## CSS Architecture
-- CSS variables in `:root` for colors (primary: #4ECDC4)
+- CSS variables in `:root` for colors (primary: #3DBBB3, accent: #D81B84)
+- Teal-to-magenta gradient for header and results section
 - CSS Grid for main layout (`grid-template-columns: 1fr 1fr`)
 - Grid for slider containers to align input boxes vertically
 - Norwegian number formatting (space as thousand separator)
 
 ## Recent Changes
+- Updated color scheme: teal-to-magenta gradient for header and results
 - Removed email functionality (was demo-only)
 - Fixed vertical alignment of input boxes using CSS Grid
 - Added margin between unit labels and container edge
