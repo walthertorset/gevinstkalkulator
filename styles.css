@@ -429,6 +429,133 @@ input[type="number"]:focus {
     font-size: 1.1rem;
 }
 
+/* Formula Section */
+.formula-section {
+    grid-column: 1 / -1;
+    padding: 0;
+}
+
+.formula-section details {
+    width: 100%;
+}
+
+.formula-section summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--text-primary);
+    list-style: none;
+    user-select: none;
+    transition: background 0.2s ease;
+}
+
+.formula-section summary::-webkit-details-marker {
+    display: none;
+}
+
+.formula-section summary:hover {
+    background: var(--background);
+}
+
+.formula-icon {
+    font-size: 1.2rem;
+}
+
+.expand-icon {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    position: relative;
+}
+
+.expand-icon::before,
+.expand-icon::after {
+    content: '';
+    position: absolute;
+    background: var(--text-secondary);
+    transition: transform 0.3s ease;
+}
+
+.expand-icon::before {
+    width: 12px;
+    height: 2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.expand-icon::after {
+    width: 2px;
+    height: 12px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+details[open] .expand-icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+    opacity: 0;
+}
+
+.formula-content {
+    padding: 0 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.formula-step {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--background);
+    border-radius: 8px;
+    gap: 20px;
+}
+
+.formula-step.highlight {
+    background: var(--primary-color);
+    color: white;
+}
+
+.formula-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.formula-equation {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.formula-step.highlight .formula-equation {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .formula-step {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .formula-equation {
+        width: 100%;
+        text-align: center;
+    }
+}
+
 /* Footer */
 footer {
     text-align: center;
