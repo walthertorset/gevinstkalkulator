@@ -177,18 +177,17 @@ section {
 
 /* Slider Container */
 .slider-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 140px;
     align-items: center;
     gap: 20px;
 }
 
 .slider-value {
-    width: 130px;
-    flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 6px;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
 .editable-value {
@@ -513,6 +512,7 @@ footer {
     }
 
     .slider-container {
+        display: flex;
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
@@ -520,11 +520,6 @@ footer {
 
     input[type="range"] {
         width: 100%;
-    }
-
-    .slider-value {
-        width: auto;
-        justify-content: flex-start;
     }
 
     .results-grid {
