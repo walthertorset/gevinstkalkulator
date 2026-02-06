@@ -28,9 +28,9 @@
                         <button class="info-btn" data-tooltip="Totalt antall brukere/pasienter som mottar hjemmetjenester">i</button>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="antallBrukere" min="1" max="500" value="30">
+                        <input type="range" id="antallBrukere" min="1" max="500" value="50">
                         <div class="slider-value">
-                            <input type="number" id="antallBrukereValue" class="editable-value" value="30" min="1" max="500">
+                            <input type="number" id="antallBrukereValue" class="editable-value" value="50" min="1" max="500">
                             <span class="unit">brukere</span>
                         </div>
                     </div>
@@ -38,14 +38,28 @@
 
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="besokPerUke">Antall fysiske besøk per bruker per uke</label>
+                        <label for="besokPerUke">Antall besøk per bruker per uke</label>
                         <button class="info-btn" data-tooltip="Gjennomsnittlig antall hjemmebesøk hver bruker får per uke">i</button>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="besokPerUke" min="1" max="21" value="3">
+                        <input type="range" id="besokPerUke" min="1" max="21" value="7">
                         <div class="slider-value">
-                            <input type="number" id="besokPerUkeValue" class="editable-value" value="3" min="1" max="21">
+                            <input type="number" id="besokPerUkeValue" class="editable-value" value="7" min="1" max="21">
                             <span class="unit">besøk</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <label for="digitaliseringsgrad">Digitaliseringsgrad</label>
+                        <button class="info-btn" data-tooltip="Andel av besøkene som kan erstattes med digitale løsninger">i</button>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="digitaliseringsgrad" min="5" max="80" step="5" value="50">
+                        <div class="slider-value">
+                            <input type="number" id="digitaliseringsgradValue" class="editable-value" value="50" min="5" max="80" step="5">
+                            <span class="unit">%</span>
                         </div>
                     </div>
                 </div>
@@ -66,14 +80,14 @@
 
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="digitaliseringsgrad">Digitaliseringsgrad</label>
-                        <button class="info-btn" data-tooltip="Andel av besøkene som kan erstattes med digitale løsninger">i</button>
+                        <label for="tidPerDigitaltBesok">Tidsbruk per digitalt besøk (minutter)</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig tid brukt på hvert digitale besøk (videokonsultasjon e.l.)">i</button>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="digitaliseringsgrad" min="5" max="80" step="5" value="20">
+                        <input type="range" id="tidPerDigitaltBesok" min="5" max="60" step="5" value="10">
                         <div class="slider-value">
-                            <input type="number" id="digitaliseringsgradValue" class="editable-value" value="20" min="5" max="80" step="5">
-                            <span class="unit">%</span>
+                            <input type="number" id="tidPerDigitaltBesokValue" class="editable-value" value="10" min="5" max="60" step="5">
+                            <span class="unit">min</span>
                         </div>
                     </div>
                 </div>
@@ -98,28 +112,42 @@
 
                 <div class="results-grid">
                     <div class="result-card">
-                        <div class="result-label">Erstattede besøk per uke</div>
+                        <div class="result-label">
+                            Nåværende tidsbruk per uke
+                            <button class="info-btn" data-tooltip="Total tid brukt på alle besøk i dag (kun fysiske)">i</button>
+                        </div>
                         <div class="result-value">
-                            <span id="erstattedeBesok">18</span>
-                            <span class="result-unit">besøk</span>
+                            <span id="navaerendeTid">45</span>
+                            <span class="result-unit">timer</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-label">
+                            Optimalisert tidsbruk per uke
+                            <button class="info-btn" data-tooltip="Total tid etter digitalisering (fysiske + digitale besøk)">i</button>
+                        </div>
+                        <div class="result-value">
+                            <span id="optimalisertTid">39</span>
+                            <span class="result-unit">timer</span>
                         </div>
                     </div>
 
                     <div class="result-card">
                         <div class="result-label">
                             Frigjorte timer per uke
-                            <button class="info-btn" data-tooltip="Timer som frigjøres til andre oppgaver hver uke">i</button>
+                            <button class="info-btn" data-tooltip="Differansen mellom nåværende og optimalisert tidsbruk">i</button>
                         </div>
                         <div class="result-value">
-                            <span id="frigjorteTimer">9</span>
+                            <span id="frigjorteTimer">6</span>
                             <span class="result-unit">timer</span>
                         </div>
                     </div>
 
                     <div class="result-card">
-                        <div class="result-label">Ukentlig frigjort ressursverdi</div>
+                        <div class="result-label">Ukentlig besparelse</div>
                         <div class="result-value">
-                            <span id="ukentligVerdi">5 400</span>
+                            <span id="ukentligVerdi">3 600</span>
                             <span class="result-unit">NOK</span>
                         </div>
                     </div>
@@ -130,7 +158,7 @@
                             <button class="info-btn light" data-tooltip="Total estimert besparelse per år basert på dine forutsetninger">i</button>
                         </div>
                         <div class="result-value large">
-                            <span id="arligGevinst">280 800</span>
+                            <span id="arligGevinst">187 200</span>
                             <span class="result-unit">NOK</span>
                         </div>
                     </div>
@@ -156,23 +184,35 @@
                     <div class="formula-content">
                         <div class="formula-step">
                             <div class="formula-label">Totale besøk per uke</div>
-                            <div class="formula-equation">Antall brukere × Besøk per uke</div>
+                            <div class="formula-equation">Brukere × Besøk per uke</div>
                         </div>
                         <div class="formula-step">
-                            <div class="formula-label">Erstattede besøk per uke</div>
-                            <div class="formula-equation">Totale besøk × (Digitaliseringsgrad / 100)</div>
+                            <div class="formula-label">Fysiske besøk</div>
+                            <div class="formula-equation">Totale besøk × (1 − Digitaliseringsgrad)</div>
                         </div>
                         <div class="formula-step">
-                            <div class="formula-label">Frigjorte timer per uke</div>
-                            <div class="formula-equation">Erstattede besøk × Tid per besøk / 60</div>
+                            <div class="formula-label">Digitale besøk</div>
+                            <div class="formula-equation">Totale besøk × Digitaliseringsgrad</div>
                         </div>
                         <div class="formula-step">
-                            <div class="formula-label">Ukentlig frigjort ressursverdi</div>
+                            <div class="formula-label">Nåværende tidsbruk</div>
+                            <div class="formula-equation">Totale besøk × Fysisk tid / 60</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Optimalisert tidsbruk</div>
+                            <div class="formula-equation">(Fysiske × Fysisk tid + Digitale × Digital tid) / 60</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Frigjorte timer</div>
+                            <div class="formula-equation">Nåværende − Optimalisert</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Ukentlig besparelse</div>
                             <div class="formula-equation">Frigjorte timer × Timekostnad</div>
                         </div>
                         <div class="formula-step highlight">
                             <div class="formula-label">Årlig økonomisk gevinst</div>
-                            <div class="formula-equation">Ukentlig verdi × 52 uker</div>
+                            <div class="formula-equation">Ukentlig besparelse × 52 uker</div>
                         </div>
                     </div>
                 </details>

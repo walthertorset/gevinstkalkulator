@@ -2,6 +2,7 @@
 const antallBrukere = document.getElementById('antallBrukere');
 const besokPerUke = document.getElementById('besokPerUke');
 const tidPerBesok = document.getElementById('tidPerBesok');
+const tidPerDigitaltBesok = document.getElementById('tidPerDigitaltBesok');
 const digitaliseringsgrad = document.getElementById('digitaliseringsgrad');
 const timekostnad = document.getElementById('timekostnad');
 
@@ -9,6 +10,7 @@ const timekostnad = document.getElementById('timekostnad');
 const antallBrukereValue = document.getElementById('antallBrukereValue');
 const besokPerUkeValue = document.getElementById('besokPerUkeValue');
 const tidPerBesokValue = document.getElementById('tidPerBesokValue');
+const tidPerDigitaltBesokValue = document.getElementById('tidPerDigitaltBesokValue');
 const digitaliseringsgradValue = document.getElementById('digitaliseringsgradValue');
 
 // Slider-input pairs for bidirectional sync
@@ -16,11 +18,13 @@ const sliderPairs = [
     { slider: antallBrukere, input: antallBrukereValue },
     { slider: besokPerUke, input: besokPerUkeValue },
     { slider: tidPerBesok, input: tidPerBesokValue },
+    { slider: tidPerDigitaltBesok, input: tidPerDigitaltBesokValue },
     { slider: digitaliseringsgrad, input: digitaliseringsgradValue }
 ];
 
 // Result elements
-const erstattedeBesok = document.getElementById('erstattedeBesok');
+const navaerendeTid = document.getElementById('navaerendeTid');
+const optimalisertTid = document.getElementById('optimalisertTid');
 const frigjorteTimer = document.getElementById('frigjorteTimer');
 const ukentligVerdi = document.getElementById('ukentligVerdi');
 const arligGevinst = document.getElementById('arligGevinst');
@@ -64,20 +68,29 @@ function syncInputToSlider(input, slider) {
 function calculate() {
     const brukere = parseInt(antallBrukere.value);
     const besok = parseInt(besokPerUke.value);
-    const tid = parseInt(tidPerBesok.value);
+    const fysiskTid = parseInt(tidPerBesok.value);
+    const digitalTid = parseInt(tidPerDigitaltBesok.value);
     const grad = parseInt(digitaliseringsgrad.value) / 100;
     const kostnad = parseFloat(timekostnad.value) || 600;
 
-    // Calculate results
+    // Calculate visits
     const totaleBesokPerUke = brukere * besok;
-    const erstattede = Math.round(totaleBesokPerUke * grad);
-    const frigjortTimer = (erstattede * tid) / 60;
-    const ukentlig = frigjortTimer * kostnad;
+    const fysiskeBesok = totaleBesokPerUke * (1 - grad);
+    const digitaleBesok = totaleBesokPerUke * grad;
+
+    // Calculate time
+    const navaerende = (totaleBesokPerUke * fysiskTid) / 60;
+    const optimalisert = (fysiskeBesok * fysiskTid + digitaleBesok * digitalTid) / 60;
+    const frigjort = navaerende - optimalisert;
+
+    // Calculate savings
+    const ukentlig = frigjort * kostnad;
     const arlig = ukentlig * 52;
 
-    // Update results with animation
-    animateValue(erstattedeBesok, erstattede);
-    animateValue(frigjorteTimer, Math.round(frigjortTimer * 10) / 10);
+    // Update results
+    animateValue(navaerendeTid, Math.round(navaerende * 10) / 10);
+    animateValue(optimalisertTid, Math.round(optimalisert * 10) / 10);
+    animateValue(frigjorteTimer, Math.round(frigjort * 10) / 10);
     ukentligVerdi.textContent = formatNumber(ukentlig);
     arligGevinst.textContent = formatNumber(arlig);
 
@@ -85,6 +98,7 @@ function calculate() {
     updateSliderProgress(antallBrukere);
     updateSliderProgress(besokPerUke);
     updateSliderProgress(tidPerBesok);
+    updateSliderProgress(tidPerDigitaltBesok);
     updateSliderProgress(digitaliseringsgrad);
 }
 
@@ -139,7 +153,8 @@ document.getElementById('exportPdf').addEventListener('click', function() {
                 <table style="width: 100%; border-collapse: collapse;">
                     <tr><td style="padding: 8px 0; color: #666;">Antall brukere</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} brukere</td></tr>
                     <tr><td style="padding: 8px 0; color: #666;">Besøk per bruker per uke</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} besøk</td></tr>
-                    <tr><td style="padding: 8px 0; color: #666;">Tid per besøk</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} minutter</td></tr>
+                    <tr><td style="padding: 8px 0; color: #666;">Tid per fysisk besøk</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} minutter</td></tr>
+                    <tr><td style="padding: 8px 0; color: #666;">Tid per digitalt besøk</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} minutter</td></tr>
                     <tr><td style="padding: 8px 0; color: #666;">Digitaliseringsgrad</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}%</td></tr>
                     <tr><td style="padding: 8px 0; color: #666;">Kommunal timekostnad</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} NOK</td></tr>
                 </table>
@@ -148,9 +163,10 @@ document.getElementById('exportPdf').addEventListener('click', function() {
             <div style="background: linear-gradient(135deg, #4ECDC4, #3DB8B0); padding: 25px; border-radius: 8px; color: white;">
                 <h2 style="font-size: 16px; margin: 0 0 15px 0;">Beregnet gevinst</h2>
                 <table style="width: 100%; border-collapse: collapse;">
-                    <tr><td style="padding: 10px 0;">Erstattede besøk per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${erstattedeBesok.textContent} besøk</td></tr>
+                    <tr><td style="padding: 10px 0;">Nåværende tidsbruk per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${navaerendeTid.textContent} timer</td></tr>
+                    <tr><td style="padding: 10px 0;">Optimalisert tidsbruk per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${optimalisertTid.textContent} timer</td></tr>
                     <tr><td style="padding: 10px 0;">Frigjorte timer per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${frigjorteTimer.textContent} timer</td></tr>
-                    <tr><td style="padding: 10px 0;">Ukentlig frigjort ressursverdi</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${ukentligVerdi.textContent} NOK</td></tr>
+                    <tr><td style="padding: 10px 0;">Ukentlig besparelse</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${ukentligVerdi.textContent} NOK</td></tr>
                     <tr style="border-top: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig økonomisk gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>
                 </table>
             </div>
