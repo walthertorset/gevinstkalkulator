@@ -54,23 +54,45 @@
 
                     <div class="result-card">
                         <div class="result-label">
-                            Frigjort tid per digitalisert tilsyn
-                            <button class="info-btn" data-tooltip="Differansen mellom fysisk og digitalt tilsyn i minutter">i</button>
-                        </div>
-                        <div class="result-value">
-                            <span id="frigjortTidPerTilsyn">0</span>
-                            <span class="result-unit">min</span>
-                        </div>
-                    </div>
-
-                    <div class="result-card">
-                        <div class="result-label">
                             Digitale tilsyn per dag
                             <button class="info-btn" data-tooltip="Antall tilsyn som erstattes digitalt per dag (beboere × tilsyn × digitaliseringsgrad)">i</button>
                         </div>
                         <div class="result-value">
                             <span id="digitaleTilsynPerDag">0</span>
                             <span class="result-unit">tilsyn</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-label">
+                            Digitale tilsyn per mnd
+                            <button class="info-btn" data-tooltip="Antall tilsyn som erstattes digitalt per måned (per dag × 30)">i</button>
+                        </div>
+                        <div class="result-value">
+                            <span id="digitaleTilsynPerMnd">0</span>
+                            <span class="result-unit">tilsyn</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-label">
+                            Frigjort tid per mnd
+                            <button class="info-btn" data-tooltip="Total frigjort tid per måned ved digitalisering">i</button>
+                        </div>
+                        <div class="result-value">
+                            <span id="frigjortTidPerMnd">0</span>
+                            <span class="result-unit">timer</span>
+                        </div>
+                    </div>
+
+                    <div class="result-card">
+                        <div class="result-label">
+                            Månedlig besparelse
+                            <button class="info-btn" data-tooltip="Estimert kostnadsbesparelse per måned (daglig × 30)">i</button>
+                        </div>
+                        <div class="result-value">
+                            <span id="maanedligBesparelse">0</span>
+                            <span class="result-unit">NOK</span>
                         </div>
                     </div>
 
@@ -205,12 +227,20 @@
                     </summary>
                     <div class="formula-content">
                         <div class="formula-step">
-                            <div class="formula-label">Frigjort tid per tilsyn</div>
-                            <div class="formula-equation">Fysisk tid − Digital tid</div>
-                        </div>
-                        <div class="formula-step">
                             <div class="formula-label">Digitale tilsyn per dag</div>
                             <div class="formula-equation">Beboere × Tilsyn per dag × Digitaliseringsgrad</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Digitale tilsyn per mnd</div>
+                            <div class="formula-equation">Digitale tilsyn per dag × 30</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Frigjort tid per mnd</div>
+                            <div class="formula-equation">Digitale tilsyn per mnd × (Fysisk − Digital tid) / 60</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Månedlig besparelse</div>
+                            <div class="formula-equation">Daglig besparelse × 30 dager</div>
                         </div>
                         <div class="formula-step">
                             <div class="formula-label">Daglig besparelse</div>

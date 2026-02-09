@@ -24,7 +24,6 @@ const sliderPairs = [
 
 // Result elements (some may be null depending on page)
 const navaerendeTid = document.getElementById('navaerendeTid');
-const optimalisertTid = document.getElementById('optimalisertTid');
 const frigjorteTimer = document.getElementById('frigjorteTimer');
 const ukentligVerdi = document.getElementById('ukentligVerdi');
 const arligGevinst = document.getElementById('arligGevinst');
@@ -81,15 +80,19 @@ function calculate() {
 
     if (isDailyModel) {
         // Daily model formula: users × supervisions/day × (physical - digital time)/60 × digitalization rate × hourly rate
-        const frigjortMinPerTilsyn = fysiskTid - digitalTid;
-        const digitaleTilsyn = brukere * besok * grad;
-        const daglig = brukere * besok * (frigjortMinPerTilsyn / 60) * grad * kostnad;
+        const digitaleTilsynDag = brukere * besok * grad;
+        const digitaleTilsynMnd = digitaleTilsynDag * 30;
+        const frigjortTimerPerMnd = digitaleTilsynMnd * (fysiskTid - digitalTid) / 60;
+        const daglig = brukere * besok * ((fysiskTid - digitalTid) / 60) * grad * kostnad;
         const ukentlig = daglig * 7;
+        const maanedlig = daglig * 30;
         const arlig = daglig * 365;
 
         // Update daily-model result elements
-        document.getElementById('frigjortTidPerTilsyn').textContent = frigjortMinPerTilsyn;
-        animateValue(document.getElementById('digitaleTilsynPerDag'), Math.round(digitaleTilsyn * 10) / 10);
+        animateValue(document.getElementById('digitaleTilsynPerDag'), Math.round(digitaleTilsynDag * 10) / 10);
+        animateValue(document.getElementById('digitaleTilsynPerMnd'), Math.round(digitaleTilsynMnd));
+        animateValue(document.getElementById('frigjortTidPerMnd'), Math.round(frigjortTimerPerMnd * 10) / 10);
+        document.getElementById('maanedligBesparelse').textContent = formatNumber(maanedlig);
         document.getElementById('dagligBesparelse').textContent = formatNumber(daglig);
         ukentligVerdi.textContent = formatNumber(ukentlig);
         arligGevinst.textContent = formatNumber(arlig);
@@ -107,7 +110,6 @@ function calculate() {
         const arlig = ukentlig * 52;
 
         animateValue(navaerendeTid, Math.round(navaerende * 10) / 10);
-        animateValue(optimalisertTid, Math.round(optimalisert * 10) / 10);
         animateValue(frigjorteTimer, Math.round(frigjort * 10) / 10);
         ukentligVerdi.textContent = formatNumber(ukentlig);
         arligGevinst.textContent = formatNumber(arlig);
@@ -224,13 +226,14 @@ document.getElementById('exportPdf').addEventListener('click', function() {
            <tr><td style="padding: 8px 0; color: #666;">Kommunal timekostnad</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} NOK</td></tr>`;
 
     const pdfResultRows = isDailyModel
-        ? `<tr><td style="padding: 10px 0;">Frigjort tid per digitalisert tilsyn</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('frigjortTidPerTilsyn').textContent} min</td></tr>
-           <tr><td style="padding: 10px 0;">Digitale tilsyn per dag</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('digitaleTilsynPerDag').textContent} tilsyn</td></tr>
+        ? `<tr><td style="padding: 10px 0;">Digitale tilsyn per dag</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('digitaleTilsynPerDag').textContent} tilsyn</td></tr>
+           <tr><td style="padding: 10px 0;">Digitale tilsyn per mnd</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('digitaleTilsynPerMnd').textContent} tilsyn</td></tr>
+           <tr><td style="padding: 10px 0;">Frigjort tid per mnd</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('frigjortTidPerMnd').textContent} timer</td></tr>
+           <tr><td style="padding: 10px 0;">Månedlig besparelse</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('maanedligBesparelse').textContent} NOK</td></tr>
            <tr><td style="padding: 10px 0;">Daglig besparelse</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('dagligBesparelse').textContent} NOK</td></tr>
            <tr><td style="padding: 10px 0;">Ukentlig besparelse</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${ukentligVerdi.textContent} NOK</td></tr>
            <tr style="border-top: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig økonomisk gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>`
         : `<tr><td style="padding: 10px 0;">Nåværende tidsbruk per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${navaerendeTid.textContent} timer</td></tr>
-           <tr><td style="padding: 10px 0;">Optimalisert tidsbruk per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${optimalisertTid.textContent} timer</td></tr>
            <tr><td style="padding: 10px 0;">Frigjorte timer per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${frigjorteTimer.textContent} timer</td></tr>
            <tr><td style="padding: 10px 0;">Ukentlig besparelse</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${ukentligVerdi.textContent} NOK</td></tr>
            <tr style="border-top: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig økonomisk gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>`;
