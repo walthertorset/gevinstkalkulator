@@ -65,7 +65,10 @@ function syncInputToSlider(input, slider) {
 }
 
 // Detect page type
-const isSykehjem = document.body.dataset.page === 'sykehjem';
+const pageType = document.body.dataset.page;
+const isSykehjem = pageType === 'sykehjem';
+const isHjemmeboende = pageType === 'hjemmeboende';
+const isDailyModel = isSykehjem || isHjemmeboende;
 
 // Calculate and update all results
 function calculate() {
@@ -76,15 +79,15 @@ function calculate() {
     const grad = parseInt(digitaliseringsgrad.value) / 100;
     const kostnad = parseFloat(timekostnad.value) || 600;
 
-    if (isSykehjem) {
-        // Sykehjem formula: residents × supervisions/day × (physical - digital time)/60 × digitalization rate × hourly rate
+    if (isDailyModel) {
+        // Daily model formula: users × supervisions/day × (physical - digital time)/60 × digitalization rate × hourly rate
         const frigjortMinPerTilsyn = fysiskTid - digitalTid;
         const digitaleTilsyn = brukere * besok * grad;
         const daglig = brukere * besok * (frigjortMinPerTilsyn / 60) * grad * kostnad;
         const ukentlig = daglig * 7;
         const arlig = daglig * 365;
 
-        // Update sykehjem-specific result elements
+        // Update daily-model result elements
         document.getElementById('frigjortTidPerTilsyn').textContent = frigjortMinPerTilsyn;
         animateValue(document.getElementById('digitaleTilsynPerDag'), Math.round(digitaleTilsyn * 10) / 10);
         document.getElementById('dagligBesparelse').textContent = formatNumber(daglig);
@@ -206,9 +209,9 @@ document.getElementById('exportPdf').addEventListener('click', function() {
     // Create a clean version for PDF
     const pdfContent = document.createElement('div');
 
-    const pdfInputRows = isSykehjem
-        ? `<tr><td style="padding: 8px 0; color: #666;">Antall beboere</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} beboere</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Tilsyn per beboer per dag</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} tilsyn</td></tr>
+    const pdfInputRows = isDailyModel
+        ? `<tr><td style="padding: 8px 0; color: #666;">Antall ${isSykehjem ? 'beboere' : 'brukere'}</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} ${isSykehjem ? 'beboere' : 'brukere'}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">Tilsyn per ${isSykehjem ? 'beboer' : 'bruker'} per dag</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} tilsyn</td></tr>
            <tr><td style="padding: 8px 0; color: #666;">Tid per fysisk tilsyn</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} minutter</td></tr>
            <tr><td style="padding: 8px 0; color: #666;">Tid per digitalt tilsyn</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} minutter</td></tr>
            <tr><td style="padding: 8px 0; color: #666;">Digitaliseringsgrad</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}%</td></tr>
@@ -220,7 +223,7 @@ document.getElementById('exportPdf').addEventListener('click', function() {
            <tr><td style="padding: 8px 0; color: #666;">Digitaliseringsgrad</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}%</td></tr>
            <tr><td style="padding: 8px 0; color: #666;">Kommunal timekostnad</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} NOK</td></tr>`;
 
-    const pdfResultRows = isSykehjem
+    const pdfResultRows = isDailyModel
         ? `<tr><td style="padding: 10px 0;">Frigjort tid per digitalisert tilsyn</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('frigjortTidPerTilsyn').textContent} min</td></tr>
            <tr><td style="padding: 10px 0;">Digitale tilsyn per dag</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('digitaleTilsynPerDag').textContent} tilsyn</td></tr>
            <tr><td style="padding: 10px 0;">Daglig besparelse</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${document.getElementById('dagligBesparelse').textContent} NOK</td></tr>
