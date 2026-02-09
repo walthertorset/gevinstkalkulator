@@ -54,17 +54,6 @@
 
                     <div class="result-card">
                         <div class="result-label">
-                            Digitale tilsyn per dag
-                            <button class="info-btn" data-tooltip="Antall tilsyn som erstattes digitalt per dag (brukere × tilsyn × digitaliseringsgrad)">i</button>
-                        </div>
-                        <div class="result-value">
-                            <span id="digitaleTilsynPerDag">0</span>
-                            <span class="result-unit">tilsyn</span>
-                        </div>
-                    </div>
-
-                    <div class="result-card">
-                        <div class="result-label">
                             Digitale tilsyn per mnd
                             <button class="info-btn" data-tooltip="Antall tilsyn som erstattes digitalt per måned (per dag × 30)">i</button>
                         </div>
@@ -92,25 +81,6 @@
                         </div>
                         <div class="result-value">
                             <span id="maanedligBesparelse">0</span>
-                            <span class="result-unit">NOK</span>
-                        </div>
-                    </div>
-
-                    <div class="result-card">
-                        <div class="result-label">
-                            Daglig besparelse
-                            <button class="info-btn" data-tooltip="Estimert kostnadsbesparelse per dag">i</button>
-                        </div>
-                        <div class="result-value">
-                            <span id="dagligBesparelse">0</span>
-                            <span class="result-unit">NOK</span>
-                        </div>
-                    </div>
-
-                    <div class="result-card">
-                        <div class="result-label">Ukentlig besparelse</div>
-                        <div class="result-value">
-                            <span id="ukentligVerdi">0</span>
                             <span class="result-unit">NOK</span>
                         </div>
                     </div>
@@ -227,12 +197,8 @@
                     </summary>
                     <div class="formula-content">
                         <div class="formula-step">
-                            <div class="formula-label">Digitale tilsyn per dag</div>
-                            <div class="formula-equation">Brukere × Tilsyn per dag × Digitaliseringsgrad</div>
-                        </div>
-                        <div class="formula-step">
                             <div class="formula-label">Digitale tilsyn per mnd</div>
-                            <div class="formula-equation">Digitale tilsyn per dag × 30</div>
+                            <div class="formula-equation">Brukere × Tilsyn per dag × Digitaliseringsgrad × 30</div>
                         </div>
                         <div class="formula-step">
                             <div class="formula-label">Frigjort tid per mnd</div>
@@ -240,15 +206,7 @@
                         </div>
                         <div class="formula-step">
                             <div class="formula-label">Månedlig besparelse</div>
-                            <div class="formula-equation">Daglig besparelse × 30 dager</div>
-                        </div>
-                        <div class="formula-step">
-                            <div class="formula-label">Daglig besparelse</div>
-                            <div class="formula-equation">Brukere × Tilsyn/dag × (Fysisk − Digital tid) / 60 × Grad × Timekostnad</div>
-                        </div>
-                        <div class="formula-step">
-                            <div class="formula-label">Ukentlig besparelse</div>
-                            <div class="formula-equation">Daglig besparelse × 7 dager</div>
+                            <div class="formula-equation">Frigjort tid per mnd × Timekostnad</div>
                         </div>
                         <div class="formula-step highlight">
                             <div class="formula-label">Årlig økonomisk gevinst</div>
