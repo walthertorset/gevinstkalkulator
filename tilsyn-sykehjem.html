@@ -43,45 +43,96 @@
                 <div class="results-grid">
                     <div class="result-card highlight">
                         <div class="result-label">
-                            Årlig økonomisk gevinst
-                            <button class="info-btn light" data-tooltip="Total estimert besparelse per år (daglig besparelse × 365 dager)">i</button>
+                            Årlig netto gevinst
+                            <button class="info-btn light" data-tooltip="Brutto besparelse minus årlig kostnad for løsningen (lisens, hardware, drift)">i</button>
                         </div>
                         <div class="result-value large">
                             <span id="arligGevinst">0</span>
                             <span class="result-unit">NOK</span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="result-card">
-                        <div class="result-label">
-                            Digitale tilsyn per mnd
-                            <button class="info-btn" data-tooltip="Antall tilsyn som erstattes digitalt per måned (per dag × 30)">i</button>
+                <!-- SEKSJON 1: ØKONOMI -->
+                <div class="results-section-group">
+                    <div class="section-subheader">Økonomi</div>
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-label">
+                                Payback-tid
+                                <button class="info-btn" data-tooltip="Tid før investeringen er tjent inn (investering / månedlig netto gevinst)">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="paybackTid">0</span>
+                                <span class="result-unit">måneder</span>
+                            </div>
                         </div>
-                        <div class="result-value">
-                            <span id="digitaleTilsynPerMnd">0</span>
-                            <span class="result-unit">tilsyn</span>
+
+                        <div class="result-card">
+                            <div class="result-label">
+                                5-års netto gevinst
+                                <button class="info-btn" data-tooltip="Total netto gevinst over 5 år minus initial investering">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="femAarsGevinst">0</span>
+                                <span class="result-unit">NOK</span>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="result-card">
-                        <div class="result-label">
-                            Frigjort tid per mnd
-                            <button class="info-btn" data-tooltip="Total frigjort tid per måned ved digitalisering">i</button>
+                <!-- SEKSJON 2: KAPASITET -->
+                <div class="results-section-group">
+                    <div class="section-subheader">Kapasitet</div>
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-label">
+                                Frigjorte årsverk
+                                <button class="info-btn" data-tooltip="Antall hele årsverk frigjort (timer spart per år / 1 695 arbeidstimer)">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="frigjorteAarsverk">0</span>
+                                <span class="result-unit">FTE</span>
+                            </div>
                         </div>
-                        <div class="result-value">
-                            <span id="frigjortTidPerMnd">0</span>
-                            <span class="result-unit">timer</span>
+
+                        <div class="result-card">
+                            <div class="result-label">
+                                Økt kapasitet
+                                <button class="info-btn" data-tooltip="Antall ekstra beboere samme bemanning kan håndtere med frigjort tid">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="ekstraKapasitet">0</span>
+                                <span class="result-unit">flere beboere</span>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="result-card">
-                        <div class="result-label">
-                            Månedlig besparelse
-                            <button class="info-btn" data-tooltip="Estimert kostnadsbesparelse per måned (daglig × 30)">i</button>
+                <!-- SEKSJON 3: AKTIVITET -->
+                <div class="results-section-group">
+                    <div class="section-subheader">Aktivitet</div>
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-label">
+                                Unngåtte fysiske tilsyn per år
+                                <button class="info-btn" data-tooltip="Totalt antall fysiske tilsyn unngått per år (per dag × 365)">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="unngaatteTilsynAar">0</span>
+                                <span class="result-unit">tilsyn</span>
+                            </div>
                         </div>
-                        <div class="result-value">
-                            <span id="maanedligBesparelse">0</span>
-                            <span class="result-unit">NOK</span>
+
+                        <div class="result-card">
+                            <div class="result-label">
+                                Timer spart per år
+                                <button class="info-btn" data-tooltip="Totalt antall timer spart per år ved digitalisering">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="timerSpartAar">0</span>
+                                <span class="result-unit">timer</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -173,6 +224,28 @@
                         <span class="currency">NOK</span>
                     </div>
                 </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <label for="lisensPerKamera">Månedlig lisens per kamera</label>
+                        <button class="info-btn" data-tooltip="Månedlig lisenskostnad per kamera/enhet for den digitale løsningen">i</button>
+                    </div>
+                    <div class="number-input-container">
+                        <input type="number" id="lisensPerKamera" min="0" max="2000" value="500">
+                        <span class="currency">NOK</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <label for="investeringPerKamera">Investering per kamera</label>
+                        <button class="info-btn" data-tooltip="Engangsinvestering per kamera/enhet (hardware, installasjon)">i</button>
+                    </div>
+                    <div class="number-input-container">
+                        <input type="number" id="investeringPerKamera" min="0" max="50000" value="10000">
+                        <span class="currency">NOK</span>
+                    </div>
+                </div>
             </section>
 
             <section class="actions-section">
@@ -197,20 +270,28 @@
                     </summary>
                     <div class="formula-content">
                         <div class="formula-step">
-                            <div class="formula-label">Digitale tilsyn per mnd</div>
-                            <div class="formula-equation">Beboere × Tilsyn per dag × Digitaliseringsgrad × 30</div>
+                            <div class="formula-label">Unngåtte tilsyn/dag</div>
+                            <div class="formula-equation">Beboere × Tilsyn/dag × Digitaliseringsgrad</div>
                         </div>
                         <div class="formula-step">
-                            <div class="formula-label">Frigjort tid per mnd</div>
-                            <div class="formula-equation">Digitale tilsyn per mnd × (Fysisk − Digital tid) / 60</div>
-                        </div>
-                        <div class="formula-step">
-                            <div class="formula-label">Månedlig besparelse</div>
-                            <div class="formula-equation">Frigjort tid per mnd × Timekostnad</div>
+                            <div class="formula-label">Timer spart/år</div>
+                            <div class="formula-equation">Unngåtte tilsyn/dag × (Fysisk − Digital tid) / 60 × 365</div>
                         </div>
                         <div class="formula-step highlight">
-                            <div class="formula-label">Årlig økonomisk gevinst</div>
-                            <div class="formula-equation">Daglig besparelse × 365 dager</div>
+                            <div class="formula-label">Årlig brutto besparelse</div>
+                            <div class="formula-equation">Timer spart/år × Timekostnad</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Årlig netto gevinst</div>
+                            <div class="formula-equation">Brutto − (Brukere × Lisens × 12)</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Payback-tid</div>
+                            <div class="formula-equation">Investering / Månedlig netto gevinst</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Frigjorte årsverk</div>
+                            <div class="formula-equation">Timer spart/år / 1 695 arbeidstimer</div>
                         </div>
                     </div>
                 </details>

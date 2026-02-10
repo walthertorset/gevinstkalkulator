@@ -381,6 +381,26 @@ input[type="number"]:focus {
     color: rgba(255, 255, 255, 0.9);
 }
 
+/* Results Section Groups */
+.results-section-group {
+    margin-bottom: 20px;
+}
+
+.results-section-group:last-child {
+    margin-bottom: 0;
+}
+
+.section-subheader {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
 /* Actions Section */
 .actions-section {
     grid-column: 1 / -1;
