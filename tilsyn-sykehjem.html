@@ -144,6 +144,8 @@
                     <h2>Dine forutsetninger</h2>
                 </div>
 
+                <div class="input-subheader">Volum</div>
+
                 <div class="input-group">
                     <div class="input-label">
                         <label for="antallBrukere">Antall brukere som mottar tjenesten</label>
@@ -172,9 +174,11 @@
                     </div>
                 </div>
 
+                <div class="input-subheader">Digitaliseringsgrad</div>
+
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="digitaliseringsgrad">Digitaliseringsgrad</label>
+                        <label for="digitaliseringsgrad">Andel tilsyn som digitaliseres</label>
                         <button class="info-btn" data-tooltip="Andel av tilsynene som kan erstattes med digitale løsninger">i</button>
                     </div>
                     <div class="slider-container">
@@ -185,6 +189,8 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="input-subheader">Tidsbruk</div>
 
                 <div class="input-group">
                     <div class="input-label">
@@ -214,36 +220,43 @@
                     </div>
                 </div>
 
-                <div class="input-group">
-                    <div class="input-label">
-                        <label for="timekostnad">Kommunal timekostnad</label>
-                        <button class="info-btn" data-tooltip="Gjennomsnittlig timekostnad for kommunalt ansatte inkludert alle kostnader">i</button>
-                    </div>
-                    <div class="number-input-container">
-                        <input type="number" id="timekostnad" min="300" max="1500" value="600">
-                        <span class="currency">NOK</span>
-                    </div>
-                </div>
+                <button class="advanced-toggle" id="advancedToggle">
+                    <span>Vis økonomiske detaljer</span>
+                    <span class="advanced-toggle-icon"></span>
+                </button>
 
-                <div class="input-group">
-                    <div class="input-label">
-                        <label for="lisensPerKamera">Månedlig lisens per kamera</label>
-                        <button class="info-btn" data-tooltip="Månedlig lisenskostnad per kamera/enhet for den digitale løsningen">i</button>
+                <div class="advanced-inputs" id="advancedInputs" style="display: none;">
+                    <div class="input-group">
+                        <div class="input-label">
+                            <label for="timekostnad">Kommunal timekostnad</label>
+                            <button class="info-btn" data-tooltip="Gjennomsnittlig timekostnad for kommunalt ansatte inkludert alle kostnader">i</button>
+                        </div>
+                        <div class="number-input-container">
+                            <input type="number" id="timekostnad" min="300" max="1500" value="600">
+                            <span class="currency">NOK</span>
+                        </div>
                     </div>
-                    <div class="number-input-container">
-                        <input type="number" id="lisensPerKamera" min="0" max="2000" value="500">
-                        <span class="currency">NOK</span>
-                    </div>
-                </div>
 
-                <div class="input-group">
-                    <div class="input-label">
-                        <label for="investeringPerKamera">Investering per kamera</label>
-                        <button class="info-btn" data-tooltip="Engangsinvestering per kamera/enhet (hardware, installasjon)">i</button>
+                    <div class="input-group">
+                        <div class="input-label">
+                            <label for="lisensPerKamera">Månedlig lisens per kamera</label>
+                            <button class="info-btn" data-tooltip="Månedlig lisenskostnad per kamera/enhet for den digitale løsningen. Veiledende pris – kan variere avhengig av avtale og kontraktstype">i</button>
+                        </div>
+                        <div class="number-input-container">
+                            <input type="number" id="lisensPerKamera" min="0" max="2000" value="500">
+                            <span class="currency">NOK</span>
+                        </div>
                     </div>
-                    <div class="number-input-container">
-                        <input type="number" id="investeringPerKamera" min="0" max="50000" value="10000">
-                        <span class="currency">NOK</span>
+
+                    <div class="input-group">
+                        <div class="input-label">
+                            <label for="investeringPerKamera">Investering per kamera</label>
+                            <button class="info-btn" data-tooltip="Engangsinvestering per kamera/enhet (hardware, installasjon). Veiledende pris – kan variere avhengig av avtale og kontraktstype">i</button>
+                        </div>
+                        <div class="number-input-container">
+                            <input type="number" id="investeringPerKamera" min="0" max="50000" value="10000">
+                            <span class="currency">NOK</span>
+                        </div>
                     </div>
                 </div>
             </section>

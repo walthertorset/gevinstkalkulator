@@ -13,7 +13,7 @@ A Norwegian calculator web app ("Tellus Gevinstkalkulator") that estimates cost 
 - `tilsyn.html` - Sub-selection page for TelluVision (Sykehjem vs Hjemmeboende)
 - `tilsyn-sykehjem.html` - Calculator for digitalt tilsyn in sykehjem/omsorgsbolig (uses `data-page="sykehjem"` for page-specific logic)
 - `tilsyn-hjemmeboende.html` - Calculator for digitalt tilsyn for hjemmeboende
-- `hjemmebesok.html` - Calculator for digitale hjemmebesøk (TelluVisit)
+- `hjemmebesok.html` - Calculator for digitale hjemmebesøk (TelluVisit, uses `data-page="hjemmebesok"`)
 - `styles.css` - All styling with CSS Grid layout and CSS variables
 - `script.js` - Calculator logic, slider sync, PDF export (shared by all calculator pages, detects page type via `body[data-page]`)
 
@@ -41,15 +41,18 @@ index.html (Tellus Gevinstkalkulator)
 
 ## Input Parameters
 
-### Hjemmebesøk & Hjemmeboende tilsyn (default)
+### Hjemmebesøk (hjemmebesok.html)
 | Parameter | Norwegian Label | Range | Default |
 |-----------|----------------|-------|---------|
 | antallBrukere | Antall brukere | 1-500 | 50 |
-| besokPerUke | Besøk/tilsyn per bruker per uke | 1-21 | 7 |
+| besokPerUke | Besøk per bruker per uke | 1-21 | 7 |
 | digitaliseringsgrad | Digitaliseringsgrad (%) | 5-80 | 50 |
-| tidPerBesok | Tid per fysisk besøk/tilsyn (min) | 5-120 | 30 |
-| tidPerDigitaltBesok | Tid per digitalt besøk/tilsyn (min) | 5-60 | 10 |
+| tidPerBesok | Tid hos bruker per besøk (min) | 5-120 | 20 |
+| reisetid | Reisetid tur/retur per besøk (min) | 5-60 | 20 |
+| tidPerDigitaltBesok | Tid per digitalt besøk (min) | 5-60 | 10 |
 | timekostnad | Kommunal timekostnad (NOK) | 300-1500 | 600 |
+| lisensPerBruker | Månedlig lisens per bruker (NOK) | 0-2000 | 300 |
+| investeringPerBruker | Investering per bruker (NOK) | 0-50000 | 5000 |
 
 ### Sykehjem (tilsyn-sykehjem.html)
 | Parameter | Norwegian Label | Range | Default |
@@ -63,26 +66,33 @@ index.html (Tellus Gevinstkalkulator)
 
 ## Calculation Formulas
 
-### Default (Hjemmebesøk & Hjemmeboende)
+### Hjemmebesøk (weekly-based, with travel time)
 ```
 totaleBesokPerUke = brukere × besokPerUke
-fysiskeBesok = totaleBesokPerUke × (1 - digitaliseringsgrad/100)
-digitaleBesok = totaleBesokPerUke × (digitaliseringsgrad/100)
-navaerendeTid = totaleBesokPerUke × fysiskTid / 60
-optimalisertTid = (fysiskeBesok × fysiskTid + digitaleBesok × digitalTid) / 60
-frigjorteTimer = navaerendeTid - optimalisertTid
-ukentligVerdi = frigjorteTimer × timekostnad
-arligGevinst = ukentligVerdi × 52
+digitaleBesokPerUke = totaleBesokPerUke × digitaliseringsgrad
+erstattedeBesokAar = digitaleBesokPerUke × 52
+spartReisetidAar = digitaleBesokPerUke × reisetid / 60 × 52
+totalTimerSpartAar = digitaleBesokPerUke × (tidHosBruker + reisetid - digitalTid) / 60 × 52
+bruttoBesparelse = totalTimerSpartAar × timekostnad
+nettoGevinst = bruttoBesparelse - (brukere × lisens × 12)
+paybackMnd = (brukere × investering) / (nettoGevinst / 12)
+femAarsNetto = (nettoGevinst × 5) - (brukere × investering)
+aarsverk = totalTimerSpartAar / 1695
 ```
 
-### Sykehjem
+Result sections for hjemmebesøk:
+- **Økonomi**: Årlig netto gevinst, Payback-tid, 5-års netto gevinst
+- **Kapasitet**: Frigjorte årsverk (FTE), Økt kapasitet (flere brukere)
+- **Aktivitet**: Erstattede fysiske besøk/år, Spart reisetid/år, Totale timer spart/år
+
+### Sykehjem (daily-based)
 ```
 dagligBesparelse = beboere × tilsynPerDag × (fysiskTid - digitalTid) / 60 × digitaliseringsgrad × timekostnad
 ukentligBesparelse = dagligBesparelse × 7
 årligGevinst = dagligBesparelse × 365
 ```
 
-Result cards for sykehjem: Årlig gevinst, Frigjort tid per tilsyn, Digitale tilsyn per dag, Daglig besparelse, Ukentlig besparelse.
+Result sections for sykehjem: Økonomi (Årlig netto gevinst, Payback-tid, 5-års netto gevinst), Kapasitet (Frigjorte årsverk, Økt kapasitet), Aktivitet (Unngåtte tilsyn/år, Timer spart/år).
 
 ## CSS Architecture
 - CSS variables in `:root` for colors (primary: #3DBBB3, accent: #D81B84)
@@ -95,9 +105,10 @@ Result cards for sykehjem: Årlig gevinst, Frigjort tid per tilsyn, Digitale til
 - `.user-selection-overlay` for the initial user count modal (fixed position, backdrop blur)
 
 ## Recent Changes
+- Hjemmebesøk calculator: split physical visit time into "Tid hos bruker" + "Reisetid tur/retur", added cost inputs (lisens, investering), restructured results into 3 sections (Økonomi, Kapasitet, Aktivitet) with travel time savings as key metric
 - Added user count selection overlay on all calculator pages (20, 50, 100, or custom)
 - Swapped layout: results on LEFT, assumptions on RIGHT
 - Moved "Årlig økonomisk gevinst" highlight card to top of results section
 - Increased font sizes in result cards
 - Sykehjem calculator: separate calculation model (daily-based), different inputs/defaults/ranges
-- PDF export is page-type aware (sykehjem vs default labels and results)
+- PDF export is page-type aware (hjemmebesok vs sykehjem/hjemmeboende labels and results)

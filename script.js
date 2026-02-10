@@ -6,6 +6,14 @@ const tidPerDigitaltBesok = document.getElementById('tidPerDigitaltBesok');
 const digitaliseringsgrad = document.getElementById('digitaliseringsgrad');
 const timekostnad = document.getElementById('timekostnad');
 
+// Hjemmebesøk-specific elements
+const reisetidSlider = document.getElementById('reisetid');
+const reisetidValueInput = document.getElementById('reisetidValue');
+
+// Hjemmeboende-specific elements
+const kjoretidSlider = document.getElementById('kjoretid');
+const kjoretidValueInput = document.getElementById('kjoretidValue');
+
 // Editable value inputs (synced with sliders)
 const antallBrukereValue = document.getElementById('antallBrukereValue');
 const besokPerUkeValue = document.getElementById('besokPerUkeValue');
@@ -22,9 +30,23 @@ const sliderPairs = [
     { slider: digitaliseringsgrad, input: digitaliseringsgradValue }
 ];
 
+// Add reisetid slider pair if present (hjemmebesøk page)
+if (reisetidSlider && reisetidValueInput) {
+    sliderPairs.push({ slider: reisetidSlider, input: reisetidValueInput });
+}
+
+// Add kjoretid slider pair if present (hjemmeboende page)
+if (kjoretidSlider && kjoretidValueInput) {
+    sliderPairs.push({ slider: kjoretidSlider, input: kjoretidValueInput });
+}
+
 // Cost input elements (sykehjem only)
 const lisensPerKamera = document.getElementById('lisensPerKamera');
 const investeringPerKamera = document.getElementById('investeringPerKamera');
+
+// Cost input elements (hjemmebesøk only)
+const lisensPerBruker = document.getElementById('lisensPerBruker');
+const investeringPerBruker = document.getElementById('investeringPerBruker');
 
 // Result elements (some may be null depending on page)
 const navaerendeTid = document.getElementById('navaerendeTid');
@@ -71,6 +93,7 @@ function syncInputToSlider(input, slider) {
 const pageType = document.body.dataset.page;
 const isSykehjem = pageType === 'sykehjem';
 const isHjemmeboende = pageType === 'hjemmeboende';
+const isHjemmebesok = pageType === 'hjemmebesok';
 const isDailyModel = isSykehjem || isHjemmeboende;
 
 // Calculate and update all results
@@ -82,12 +105,64 @@ function calculate() {
     const grad = parseInt(digitaliseringsgrad.value) / 100;
     const kostnad = parseFloat(timekostnad.value) || 600;
 
-    if (isDailyModel) {
+    if (isHjemmebesok) {
+        // === HJEMMEBESØK MODEL (weekly-based, with travel time) ===
+        const reise = parseInt(reisetidSlider.value);
+        const totaleBesokPerUke = brukere * besok;
+        const digitaleBesokPerUke = totaleBesokPerUke * grad;
+
         // === AKTIVITET ===
+        const erstattedeBesokAar = Math.round(digitaleBesokPerUke * 52);
+        const spartReisetidAar = digitaleBesokPerUke * reise / 60 * 52;
+        const totalTimerSpartAar = digitaleBesokPerUke * (fysiskTid + reise - digitalTid) / 60 * 52;
+
+        // === ØKONOMI ===
+        const bruttoBesparelse = totalTimerSpartAar * kostnad;
+        const lisens = lisensPerBruker ? (parseFloat(lisensPerBruker.value) || 0) : 0;
+        const investering = investeringPerBruker ? (parseFloat(investeringPerBruker.value) || 0) : 0;
+        const arligKostnad = brukere * lisens * 12;
+        const totalInvestering = brukere * investering;
+        const nettoGevinst = bruttoBesparelse - arligKostnad;
+        const maanedligNetto = nettoGevinst / 12;
+        const paybackMnd = maanedligNetto > 0 ? totalInvestering / maanedligNetto : 0;
+        const femAarsNetto = (nettoGevinst * 5) - totalInvestering;
+
+        // === KAPASITET ===
+        const aarsverk = totalTimerSpartAar / 1695;
+        const tidPerBrukerAar = besok * (fysiskTid + reise) / 60 * 52;
+        const ekstraBrukere = tidPerBrukerAar > 0 ? totalTimerSpartAar / tidPerBrukerAar : 0;
+
+        // Update Økonomi
+        arligGevinst.textContent = formatNumber(nettoGevinst);
+        const paybackEl = document.getElementById('paybackTid');
+        if (paybackEl) paybackEl.textContent = paybackMnd > 0 ? (Math.round(paybackMnd * 10) / 10).toString().replace('.', ',') : '—';
+        const femAarsEl = document.getElementById('femAarsGevinst');
+        if (femAarsEl) femAarsEl.textContent = formatNumber(femAarsNetto);
+
+        // Update Kapasitet
+        const aarsverkEl = document.getElementById('frigjorteAarsverk');
+        if (aarsverkEl) aarsverkEl.textContent = (Math.round(aarsverk * 10) / 10).toString().replace('.', ',');
+        const kapasitetEl = document.getElementById('ekstraKapasitet');
+        if (kapasitetEl) kapasitetEl.textContent = Math.round(ekstraBrukere);
+
+        // Update Operasjonell nytte
+        const erstattedEl = document.getElementById('erstattedeBesokAar');
+        if (erstattedEl) erstattedEl.textContent = formatNumber(erstattedeBesokAar);
+        const reisetidEl = document.getElementById('spartReisetidAar');
+        if (reisetidEl) reisetidEl.textContent = formatNumber(Math.round(spartReisetidAar));
+        const timerEl = document.getElementById('timerSpartAar');
+        if (timerEl) timerEl.textContent = formatNumber(Math.round(totalTimerSpartAar));
+
+    } else if (isDailyModel) {
+        // === SYKEHJEM / HJEMMEBOENDE MODEL (daily-based) ===
+        const kjoretid = kjoretidSlider ? parseInt(kjoretidSlider.value) : 0;
         const unngaatteDag = brukere * besok * grad;
         const unngaatteAar = unngaatteDag * 365;
-        const tidSpartMinPerDag = unngaatteDag * (fysiskTid - digitalTid);
+        const tidSpartMinPerDag = isHjemmeboende
+            ? unngaatteDag * (fysiskTid + kjoretid - digitalTid)
+            : unngaatteDag * (fysiskTid - digitalTid);
         const timerSpartAar = (tidSpartMinPerDag * 365) / 60;
+        const timerSpartBilAar = isHjemmeboende ? (unngaatteDag * kjoretid / 60 * 365) : 0;
 
         // === ØKONOMI ===
         const bruttoBesparelse = timerSpartAar * kostnad;
@@ -102,8 +177,9 @@ function calculate() {
 
         // === KAPASITET ===
         const aarsverk = timerSpartAar / 1695;
-        const stillingsprosent = aarsverk * 100;
-        const tidPerBeboerAar = besok * fysiskTid / 60 * 365;
+        const tidPerBeboerAar = isHjemmeboende
+            ? besok * (fysiskTid + kjoretid) / 60 * 365
+            : besok * fysiskTid / 60 * 365;
         const ekstraBeboere = tidPerBeboerAar > 0 ? timerSpartAar / tidPerBeboerAar : 0;
 
         // Update Økonomi
@@ -122,25 +198,10 @@ function calculate() {
         // Update Aktivitet
         const tilsynAarEl = document.getElementById('unngaatteTilsynAar');
         if (tilsynAarEl) tilsynAarEl.textContent = formatNumber(unngaatteAar);
+        const timerBilEl = document.getElementById('timerSpartBilAar');
+        if (timerBilEl) timerBilEl.textContent = formatNumber(Math.round(timerSpartBilAar));
         const timerEl = document.getElementById('timerSpartAar');
         if (timerEl) timerEl.textContent = formatNumber(Math.round(timerSpartAar));
-    } else {
-        // Default formula for hjemmebesøk and hjemmeboende tilsyn
-        const totaleBesokPerUke = brukere * besok;
-        const fysiskeBesok = totaleBesokPerUke * (1 - grad);
-        const digitaleBesok = totaleBesokPerUke * grad;
-
-        const navaerende = (totaleBesokPerUke * fysiskTid) / 60;
-        const optimalisert = (fysiskeBesok * fysiskTid + digitaleBesok * digitalTid) / 60;
-        const frigjort = navaerende - optimalisert;
-
-        const ukentlig = frigjort * kostnad;
-        const arlig = ukentlig * 52;
-
-        animateValue(navaerendeTid, Math.round(navaerende * 10) / 10);
-        animateValue(frigjorteTimer, Math.round(frigjort * 10) / 10);
-        ukentligVerdi.textContent = formatNumber(ukentlig);
-        arligGevinst.textContent = formatNumber(arlig);
     }
 
     // Update slider visuals
@@ -149,6 +210,8 @@ function calculate() {
     updateSliderProgress(tidPerBesok);
     updateSliderProgress(tidPerDigitaltBesok);
     updateSliderProgress(digitaliseringsgrad);
+    if (reisetidSlider) updateSliderProgress(reisetidSlider);
+    if (kjoretidSlider) updateSliderProgress(kjoretidSlider);
 }
 
 // Simple animation for result values
@@ -156,6 +219,20 @@ function animateValue(element, newValue) {
     element.textContent = typeof newValue === 'number' && !Number.isInteger(newValue)
         ? newValue.toFixed(1).replace('.', ',')
         : newValue;
+}
+
+// Advanced toggle logic
+function initAdvancedToggle() {
+    const toggleBtn = document.getElementById('advancedToggle');
+    const advancedInputs = document.getElementById('advancedInputs');
+    if (!toggleBtn || !advancedInputs) return;
+
+    toggleBtn.addEventListener('click', () => {
+        const isOpen = advancedInputs.style.display !== 'none';
+        advancedInputs.style.display = isOpen ? 'none' : 'block';
+        toggleBtn.classList.toggle('open', !isOpen);
+        toggleBtn.querySelector('span:first-child').textContent = isOpen ? 'Vis økonomiske detaljer' : 'Skjul økonomiske detaljer';
+    });
 }
 
 // Event listeners for sliders (update input fields and calculate)
@@ -184,6 +261,10 @@ timekostnad.addEventListener('input', calculate);
 if (lisensPerKamera) lisensPerKamera.addEventListener('input', calculate);
 if (investeringPerKamera) investeringPerKamera.addEventListener('input', calculate);
 
+// Event listeners for cost inputs (hjemmebesøk only)
+if (lisensPerBruker) lisensPerBruker.addEventListener('input', calculate);
+if (investeringPerBruker) investeringPerBruker.addEventListener('input', calculate);
+
 
 // Share functionality - generate URL with current values
 document.getElementById('shareBtn').addEventListener('click', function() {
@@ -196,8 +277,12 @@ document.getElementById('shareBtn').addEventListener('click', function() {
         grad: digitaliseringsgrad.value,
         kostnad: timekostnad.value
     };
+    if (reisetidSlider) paramObj.reisetid = reisetidSlider.value;
+    if (kjoretidSlider) paramObj.kjoretid = kjoretidSlider.value;
     if (lisensPerKamera) paramObj.lisens = lisensPerKamera.value;
     if (investeringPerKamera) paramObj.investering = investeringPerKamera.value;
+    if (lisensPerBruker) paramObj.lisens = lisensPerBruker.value;
+    if (investeringPerBruker) paramObj.investering = investeringPerBruker.value;
     const params = new URLSearchParams(paramObj);
     const url = window.location.origin + window.location.pathname + '?' + params.toString();
 
@@ -234,6 +319,16 @@ function applyUrlParams() {
         timekostnad.value = kostnad;
     }
 
+    if (reisetidSlider && params.has('reisetid')) {
+        const val = parseInt(params.get('reisetid'));
+        if (!isNaN(val)) reisetidSlider.value = val;
+    }
+
+    if (kjoretidSlider && params.has('kjoretid')) {
+        const val = parseInt(params.get('kjoretid'));
+        if (!isNaN(val)) kjoretidSlider.value = val;
+    }
+
     if (lisensPerKamera && params.has('lisens')) {
         const val = parseInt(params.get('lisens'));
         if (!isNaN(val)) lisensPerKamera.value = val;
@@ -241,6 +336,14 @@ function applyUrlParams() {
     if (investeringPerKamera && params.has('investering')) {
         const val = parseInt(params.get('investering'));
         if (!isNaN(val)) investeringPerKamera.value = val;
+    }
+    if (lisensPerBruker && params.has('lisens')) {
+        const val = parseInt(params.get('lisens'));
+        if (!isNaN(val)) lisensPerBruker.value = val;
+    }
+    if (investeringPerBruker && params.has('investering')) {
+        const val = parseInt(params.get('investering'));
+        if (!isNaN(val)) investeringPerBruker.value = val;
     }
 
     return true;
@@ -255,25 +358,44 @@ document.getElementById('exportPdf').addEventListener('click', function() {
     // Create a clean version for PDF
     const pdfContent = document.createElement('div');
 
-    const pdfInputRows = isDailyModel
-        ? `<tr><td style="padding: 8px 0; color: #666;">Antall ${isSykehjem ? 'beboere' : 'brukere'}</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} ${isSykehjem ? 'beboere' : 'brukere'}</td></tr>
+    let pdfInputRows;
+    if (isHjemmebesok) {
+        pdfInputRows = `<tr><td style="padding: 8px 0; color: #666;">Antall brukere</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} brukere</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">Besøk per bruker per uke</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} besøk</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">Tid hos bruker per besøk</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} minutter</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">Reisetid tur/retur per besøk</td><td style="text-align: right; font-weight: 600;">${reisetidSlider.value} minutter</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">Tid per digitalt besøk</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} minutter</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">Digitaliseringsgrad</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}%</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">Kommunal timekostnad</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} NOK</td></tr>
+           ${lisensPerBruker ? `<tr><td style="padding: 8px 0; color: #666;">Månedlig lisens per bruker</td><td style="text-align: right; font-weight: 600;">${lisensPerBruker.value} NOK</td></tr>` : ''}
+           ${investeringPerBruker ? `<tr><td style="padding: 8px 0; color: #666;">Investering per bruker</td><td style="text-align: right; font-weight: 600;">${formatNumber(investeringPerBruker.value)} NOK</td></tr>` : ''}`;
+    } else if (isDailyModel) {
+        pdfInputRows = `<tr><td style="padding: 8px 0; color: #666;">Antall ${isSykehjem ? 'beboere' : 'brukere'}</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} ${isSykehjem ? 'beboere' : 'brukere'}</td></tr>
            <tr><td style="padding: 8px 0; color: #666;">Tilsyn per ${isSykehjem ? 'beboer' : 'bruker'} per dag</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} tilsyn</td></tr>
            <tr><td style="padding: 8px 0; color: #666;">Tid per fysisk tilsyn</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} minutter</td></tr>
+           ${kjoretidSlider ? `<tr><td style="padding: 8px 0; color: #666;">Kjøretid per fysisk tilsyn</td><td style="text-align: right; font-weight: 600;">${kjoretidSlider.value} minutter</td></tr>` : ''}
            <tr><td style="padding: 8px 0; color: #666;">Tid per digitalt tilsyn</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} minutter</td></tr>
            <tr><td style="padding: 8px 0; color: #666;">Digitaliseringsgrad</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}%</td></tr>
            <tr><td style="padding: 8px 0; color: #666;">Kommunal timekostnad</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} NOK</td></tr>
            ${lisensPerKamera ? `<tr><td style="padding: 8px 0; color: #666;">Månedlig lisens per kamera</td><td style="text-align: right; font-weight: 600;">${lisensPerKamera.value} NOK</td></tr>` : ''}
-           ${investeringPerKamera ? `<tr><td style="padding: 8px 0; color: #666;">Investering per kamera</td><td style="text-align: right; font-weight: 600;">${formatNumber(investeringPerKamera.value)} NOK</td></tr>` : ''}`
-        : `<tr><td style="padding: 8px 0; color: #666;">Antall brukere</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} brukere</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Besøk per bruker per uke</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} besøk</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Tid per fysisk besøk</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} minutter</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Tid per digitalt besøk</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} minutter</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Digitaliseringsgrad</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}%</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Kommunal timekostnad</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} NOK</td></tr>`;
+           ${investeringPerKamera ? `<tr><td style="padding: 8px 0; color: #666;">Investering per kamera</td><td style="text-align: right; font-weight: 600;">${formatNumber(investeringPerKamera.value)} NOK</td></tr>` : ''}`;
+    }
 
     const getVal = (id) => { const el = document.getElementById(id); return el ? el.textContent : '0'; };
-    const pdfResultRows = isDailyModel
-        ? `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>
+
+    let pdfResultRows;
+    if (isHjemmebesok) {
+        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>
+           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Økonomi</td></tr>
+           <tr><td style="padding: 8px 0;">Payback-tid</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('paybackTid')} mnd</td></tr>
+           <tr><td style="padding: 8px 0;">5-års netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('femAarsGevinst')} NOK</td></tr>
+           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Operasjonell nytte</td></tr>
+           <tr><td style="padding: 8px 0;">Totale timer spart per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} timer</td></tr>
+           <tr><td style="padding: 8px 0; font-size: 13px; opacity: 0.8;">  herav spart reisetid</td><td style="text-align: right; font-weight: 600; font-size: 14px;">${getVal('spartReisetidAar')} timer</td></tr>
+           <tr><td style="padding: 8px 0;">Frigjorte årsverk</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} FTE</td></tr>
+           <tr><td style="padding: 8px 0; font-size: 13px; opacity: 0.8;">  ${getVal('erstattedeBesokAar')} erstattede besøk/år · ${getVal('ekstraKapasitet')} flere brukere</td><td></td></tr>`;
+    } else if (isDailyModel) {
+        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>
            <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Økonomi</td></tr>
            <tr><td style="padding: 8px 0;">Payback-tid</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('paybackTid')} mnd</td></tr>
            <tr><td style="padding: 8px 0;">5-års netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('femAarsGevinst')} NOK</td></tr>
@@ -281,12 +403,11 @@ document.getElementById('exportPdf').addEventListener('click', function() {
            <tr><td style="padding: 8px 0;">Frigjorte årsverk</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} FTE</td></tr>
            <tr><td style="padding: 8px 0;">Økt kapasitet</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('ekstraKapasitet')} flere beboere</td></tr>
            <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Aktivitet</td></tr>
-           <tr><td style="padding: 8px 0;">Unngåtte fysiske tilsyn per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('unngaatteTilsynAar')} tilsyn</td></tr>
-           <tr><td style="padding: 8px 0;">Timer spart per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} timer</td></tr>`
-        : `<tr><td style="padding: 10px 0;">Nåværende tidsbruk per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${navaerendeTid.textContent} timer</td></tr>
-           <tr><td style="padding: 10px 0;">Frigjorte timer per uke</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${frigjorteTimer.textContent} timer</td></tr>
-           <tr><td style="padding: 10px 0;">Ukentlig besparelse</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${ukentligVerdi.textContent} NOK</td></tr>
-           <tr style="border-top: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig økonomisk gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>`;
+           ${isHjemmeboende
+               ? `<tr><td style="padding: 8px 0;">Timer spart i bil per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartBilAar')} timer</td></tr>`
+               : `<tr><td style="padding: 8px 0;">Unngåtte fysiske tilsyn per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('unngaatteTilsynAar')} tilsyn</td></tr>`}
+           <tr><td style="padding: 8px 0;">Timer spart per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} timer</td></tr>`;
+    }
 
     pdfContent.innerHTML = `
         <div style="font-family: 'Segoe UI', sans-serif; padding: 40px; max-width: 800px;">
@@ -387,9 +508,14 @@ function init() {
     } else {
         initUserSelection();
     }
+
+    // Init hjemmebesøk-specific features
+    initAdvancedToggle();
 }
 
-document.addEventListener('DOMContentLoaded', init);
-
-// Also run immediately in case DOM is already loaded
-init();
+// Run init when DOM is ready (only once)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}

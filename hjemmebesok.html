@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gevinstkalkulator - Digitale Hjemmebesøk</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-<body>
+<body data-page="hjemmebesok">
     <div class="container">
         <header>
             <a href="index.html" class="back-link">&#8592; Tilbake til tjenesteoversikt</a>
@@ -43,42 +43,74 @@
                 <div class="results-grid">
                     <div class="result-card highlight">
                         <div class="result-label">
-                            Årlig økonomisk gevinst
-                            <button class="info-btn light" data-tooltip="Total estimert besparelse per år basert på dine forutsetninger">i</button>
+                            Årlig netto gevinst
+                            <button class="info-btn light" data-tooltip="Total estimert besparelse per år minus årlig lisenskostnad">i</button>
                         </div>
                         <div class="result-value large">
-                            <span id="arligGevinst">187 200</span>
+                            <span id="arligGevinst">0</span>
                             <span class="result-unit">NOK</span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="result-card">
-                        <div class="result-label">
-                            Nåværende tidsbruk per uke
-                            <button class="info-btn" data-tooltip="Total tid brukt på alle besøk i dag (kun fysiske)">i</button>
+                <!-- ØKONOMI -->
+                <div class="results-section-group">
+                    <div class="section-subheader">Økonomi</div>
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-label">
+                                Payback-tid
+                                <button class="info-btn" data-tooltip="Tid før investeringen er tjent inn (investering / månedlig netto gevinst)">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="paybackTid">0</span>
+                                <span class="result-unit">måneder</span>
+                            </div>
                         </div>
-                        <div class="result-value">
-                            <span id="navaerendeTid">45</span>
-                            <span class="result-unit">timer</span>
+
+                        <div class="result-card">
+                            <div class="result-label">
+                                5-års netto gevinst
+                                <button class="info-btn" data-tooltip="Total netto gevinst over 5 år minus initial investering">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="femAarsGevinst">0</span>
+                                <span class="result-unit">NOK</span>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="result-card">
-                        <div class="result-label">
-                            Frigjorte timer per uke
-                            <button class="info-btn" data-tooltip="Differansen mellom nåværende og optimalisert tidsbruk">i</button>
+                <!-- OPERASJONELL NYTTE -->
+                <div class="results-section-group">
+                    <div class="section-subheader">Operasjonell nytte</div>
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-label">
+                                Totale timer spart per år
+                                <button class="info-btn" data-tooltip="Sum av spart reisetid og spart besøkstid per år">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="timerSpartAar">0</span>
+                                <span class="result-unit">timer</span>
+                            </div>
+                            <div class="result-secondary">
+                                herav <span id="spartReisetidAar">0</span> timer spart reisetid
+                            </div>
                         </div>
-                        <div class="result-value">
-                            <span id="frigjorteTimer">6</span>
-                            <span class="result-unit">timer</span>
-                        </div>
-                    </div>
 
-                    <div class="result-card">
-                        <div class="result-label">Ukentlig besparelse</div>
-                        <div class="result-value">
-                            <span id="ukentligVerdi">3 600</span>
-                            <span class="result-unit">NOK</span>
+                        <div class="result-card">
+                            <div class="result-label">
+                                Frigjorte årsverk
+                                <button class="info-btn" data-tooltip="Antall hele årsverk frigjort (timer spart per år / 1 695 arbeidstimer)">i</button>
+                            </div>
+                            <div class="result-value">
+                                <span id="frigjorteAarsverk">0</span>
+                                <span class="result-unit">FTE</span>
+                            </div>
+                            <div class="result-secondary">
+                                <span id="erstattedeBesokAar">0</span> erstattede besøk/år · <span id="ekstraKapasitet">0</span> flere brukere
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,6 +121,8 @@
                     <span class="section-icon">📊</span>
                     <h2>Dine forutsetninger</h2>
                 </div>
+
+                <div class="input-subheader">Volum</div>
 
                 <div class="input-group">
                     <div class="input-label">
@@ -110,17 +144,19 @@
                         <button class="info-btn" data-tooltip="Gjennomsnittlig antall hjemmebesøk hver bruker får per uke">i</button>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="besokPerUke" min="1" max="21" value="7">
+                        <input type="range" id="besokPerUke" min="1" max="21" value="3">
                         <div class="slider-value">
-                            <input type="number" id="besokPerUkeValue" class="editable-value" value="7" min="1" max="21">
+                            <input type="number" id="besokPerUkeValue" class="editable-value" value="3" min="1" max="21">
                             <span class="unit">besøk</span>
                         </div>
                     </div>
                 </div>
 
+                <div class="input-subheader">Digitaliseringsgrad</div>
+
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="digitaliseringsgrad">Digitaliseringsgrad</label>
+                        <label for="digitaliseringsgrad">Andel besøk som digitaliseres</label>
                         <button class="info-btn" data-tooltip="Andel av besøkene som kan erstattes med digitale løsninger">i</button>
                     </div>
                     <div class="slider-container">
@@ -132,15 +168,31 @@
                     </div>
                 </div>
 
+                <div class="input-subheader">Tidsbruk</div>
+
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="tidPerBesok">Tidsbruk per fysisk besøk (minutter)</label>
-                        <button class="info-btn" data-tooltip="Gjennomsnittlig tid brukt på hvert fysiske hjemmebesøk, inkludert reisetid">i</button>
+                        <label for="tidPerBesok">Tid hos bruker per besøk (minutter)</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig tid tilbrakt hjemme hos bruker per fysisk besøk">i</button>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="tidPerBesok" min="5" max="120" step="5" value="30">
+                        <input type="range" id="tidPerBesok" min="5" max="120" step="5" value="20">
                         <div class="slider-value">
-                            <input type="number" id="tidPerBesokValue" class="editable-value" value="30" min="5" max="120" step="5">
+                            <input type="number" id="tidPerBesokValue" class="editable-value" value="20" min="5" max="120" step="5">
+                            <span class="unit">min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <label for="reisetid">Reisetid tur/retur per besøk (minutter)</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig reisetid tur/retur til bruker per fysisk besøk">i</button>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="reisetid" min="5" max="60" step="5" value="15">
+                        <div class="slider-value">
+                            <input type="number" id="reisetidValue" class="editable-value" value="15" min="5" max="60" step="5">
                             <span class="unit">min</span>
                         </div>
                     </div>
@@ -160,14 +212,43 @@
                     </div>
                 </div>
 
-                <div class="input-group">
-                    <div class="input-label">
-                        <label for="timekostnad">Kommunal timekostnad</label>
-                        <button class="info-btn" data-tooltip="Gjennomsnittlig timekostnad for kommunalt ansatte inkludert alle kostnader">i</button>
+                <button class="advanced-toggle" id="advancedToggle">
+                    <span>Vis økonomiske detaljer</span>
+                    <span class="advanced-toggle-icon"></span>
+                </button>
+
+                <div class="advanced-inputs" id="advancedInputs" style="display: none;">
+                    <div class="input-group">
+                        <div class="input-label">
+                            <label for="timekostnad">Kommunal timekostnad</label>
+                            <button class="info-btn" data-tooltip="Gjennomsnittlig timekostnad for kommunalt ansatte inkludert alle kostnader">i</button>
+                        </div>
+                        <div class="number-input-container">
+                            <input type="number" id="timekostnad" min="300" max="1500" value="600">
+                            <span class="currency">NOK</span>
+                        </div>
                     </div>
-                    <div class="number-input-container">
-                        <input type="number" id="timekostnad" min="300" max="1500" value="600">
-                        <span class="currency">NOK</span>
+
+                    <div class="input-group">
+                        <div class="input-label">
+                            <label for="lisensPerBruker">Månedlig lisens per bruker</label>
+                            <button class="info-btn" data-tooltip="Månedlig lisenskostnad per bruker for den digitale løsningen. Veiledende pris – kan variere avhengig av avtale og kontraktstype">i</button>
+                        </div>
+                        <div class="number-input-container">
+                            <input type="number" id="lisensPerBruker" min="0" max="2000" value="300">
+                            <span class="currency">NOK</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-label">
+                            <label for="investeringPerBruker">Investering per bruker</label>
+                            <button class="info-btn" data-tooltip="Engangsinvestering per bruker (nettbrett, oppsett, opplæring). Veiledende pris – kan variere avhengig av avtale og kontraktstype">i</button>
+                        </div>
+                        <div class="number-input-container">
+                            <input type="number" id="investeringPerBruker" min="0" max="50000" value="5000">
+                            <span class="currency">NOK</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -198,28 +279,32 @@
                             <div class="formula-equation">Brukere × Besøk per uke</div>
                         </div>
                         <div class="formula-step">
-                            <div class="formula-label">Fysiske besøk</div>
-                            <div class="formula-equation">Totale besøk × (1 − Digitaliseringsgrad)</div>
-                        </div>
-                        <div class="formula-step">
-                            <div class="formula-label">Digitale besøk</div>
+                            <div class="formula-label">Erstattede besøk per uke</div>
                             <div class="formula-equation">Totale besøk × Digitaliseringsgrad</div>
                         </div>
                         <div class="formula-step">
-                            <div class="formula-label">Nåværende tidsbruk</div>
-                            <div class="formula-equation">Totale besøk × Fysisk tid / 60</div>
+                            <div class="formula-label">Spart reisetid per år</div>
+                            <div class="formula-equation">Erstattede besøk/uke × Reisetid / 60 × 52</div>
                         </div>
                         <div class="formula-step">
-                            <div class="formula-label">Frigjorte timer</div>
-                            <div class="formula-equation">Nåværende − Optimalisert</div>
-                        </div>
-                        <div class="formula-step">
-                            <div class="formula-label">Ukentlig besparelse</div>
-                            <div class="formula-equation">Frigjorte timer × Timekostnad</div>
+                            <div class="formula-label">Total tid spart per år</div>
+                            <div class="formula-equation">Erstattede besøk/uke × (Tid hos bruker + Reisetid − Digital tid) / 60 × 52</div>
                         </div>
                         <div class="formula-step highlight">
-                            <div class="formula-label">Årlig økonomisk gevinst</div>
-                            <div class="formula-equation">Ukentlig besparelse × 52 uker</div>
+                            <div class="formula-label">Årlig brutto besparelse</div>
+                            <div class="formula-equation">Total tid spart/år × Timekostnad</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Årlig netto gevinst</div>
+                            <div class="formula-equation">Brutto − (Brukere × Lisens × 12)</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Payback-tid</div>
+                            <div class="formula-equation">Investering / Månedlig netto gevinst</div>
+                        </div>
+                        <div class="formula-step">
+                            <div class="formula-label">Frigjorte årsverk</div>
+                            <div class="formula-equation">Timer spart/år / 1 695 arbeidstimer</div>
                         </div>
                     </div>
                 </details>
