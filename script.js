@@ -129,8 +129,6 @@ function calculate() {
 
         // === KAPASITET ===
         const aarsverk = totalTimerSpartAar / 1695;
-        const tidPerBrukerAar = besok * (fysiskTid + reise) / 60 * 52;
-        const ekstraBrukere = tidPerBrukerAar > 0 ? totalTimerSpartAar / tidPerBrukerAar : 0;
 
         // Update Økonomi
         arligGevinst.textContent = formatNumber(nettoGevinst);
@@ -142,8 +140,6 @@ function calculate() {
         // Update Kapasitet
         const aarsverkEl = document.getElementById('frigjorteAarsverk');
         if (aarsverkEl) aarsverkEl.textContent = (Math.round(aarsverk * 10) / 10).toString().replace('.', ',');
-        const kapasitetEl = document.getElementById('ekstraKapasitet');
-        if (kapasitetEl) kapasitetEl.textContent = Math.round(ekstraBrukere);
 
         // Update Operasjonell nytte
         const erstattedEl = document.getElementById('erstattedeBesokAar');
@@ -391,9 +387,9 @@ document.getElementById('exportPdf').addEventListener('click', function() {
            <tr><td style="padding: 8px 0;">5-års netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('femAarsGevinst')} NOK</td></tr>
            <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Operasjonell nytte</td></tr>
            <tr><td style="padding: 8px 0;">Totale timer spart per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} timer</td></tr>
-           <tr><td style="padding: 8px 0; font-size: 13px; opacity: 0.8;">  herav spart reisetid</td><td style="text-align: right; font-weight: 600; font-size: 14px;">${getVal('spartReisetidAar')} timer</td></tr>
-           <tr><td style="padding: 8px 0;">Frigjorte årsverk</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} FTE</td></tr>
-           <tr><td style="padding: 8px 0; font-size: 13px; opacity: 0.8;">  ${getVal('erstattedeBesokAar')} erstattede besøk/år · ${getVal('ekstraKapasitet')} flere brukere</td><td></td></tr>`;
+           <tr><td style="padding: 8px 0;">Spart reisetid per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('spartReisetidAar')} timer</td></tr>
+           <tr><td style="padding: 8px 0;">Erstattede fysiske besøk per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('erstattedeBesokAar')} besøk</td></tr>
+           <tr><td style="padding: 8px 0;">Frigjorte årsverk</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} FTE</td></tr>`;
     } else if (isDailyModel) {
         pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>
            <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Økonomi</td></tr>
