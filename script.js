@@ -22,13 +22,13 @@ const tidPerDigitaltBesokValue = document.getElementById('tidPerDigitaltBesokVal
 const digitaliseringsgradValue = document.getElementById('digitaliseringsgradValue');
 
 // Slider-input pairs for bidirectional sync
-const sliderPairs = [
-    { slider: antallBrukere, input: antallBrukereValue },
-    { slider: besokPerUke, input: besokPerUkeValue },
-    { slider: tidPerBesok, input: tidPerBesokValue },
-    { slider: tidPerDigitaltBesok, input: tidPerDigitaltBesokValue },
-    { slider: digitaliseringsgrad, input: digitaliseringsgradValue }
-];
+const sliderPairs = [];
+if (antallBrukere && antallBrukereValue) sliderPairs.push({ slider: antallBrukere, input: antallBrukereValue });
+if (besokPerUke && besokPerUkeValue) sliderPairs.push({ slider: besokPerUke, input: besokPerUkeValue });
+if (tidPerBesok && tidPerBesokValue) sliderPairs.push({ slider: tidPerBesok, input: tidPerBesokValue });
+if (tidPerDigitaltBesok && tidPerDigitaltBesokValue) sliderPairs.push({ slider: tidPerDigitaltBesok, input: tidPerDigitaltBesokValue });
+if (digitaliseringsgrad && digitaliseringsgradValue) sliderPairs.push({ slider: digitaliseringsgrad, input: digitaliseringsgradValue });
+
 
 // Add reisetid slider pair if present (hjemmebesøk page)
 if (reisetidSlider && reisetidValueInput) {
@@ -98,6 +98,8 @@ const isDailyModel = isSykehjem || isHjemmeboende;
 
 // Calculate and update all results
 function calculate() {
+    if (!antallBrukere) return; // Skip if inputs don't exist on this page
+
     const brukere = parseInt(antallBrukere.value);
     const besok = parseInt(besokPerUke.value);
     const fysiskTid = parseInt(tidPerBesok.value);
@@ -251,7 +253,7 @@ sliderPairs.forEach(({ slider, input }) => {
 });
 
 // Event listener for timekostnad (number input only)
-timekostnad.addEventListener('input', calculate);
+if (timekostnad) timekostnad.addEventListener('input', calculate);
 
 // Event listeners for cost inputs (sykehjem only)
 if (lisensPerKamera) lisensPerKamera.addEventListener('input', calculate);
@@ -263,7 +265,8 @@ if (investeringPerBruker) investeringPerBruker.addEventListener('input', calcula
 
 
 // Share functionality - generate URL with current values
-document.getElementById('shareBtn').addEventListener('click', function() {
+const shareBtn = document.getElementById('shareBtn');
+if (shareBtn) shareBtn.addEventListener('click', function() {
     const btn = this;
     const paramObj = {
         brukere: antallBrukere.value,
@@ -283,15 +286,16 @@ document.getElementById('shareBtn').addEventListener('click', function() {
     const url = window.location.origin + window.location.pathname + '?' + params.toString();
 
     navigator.clipboard.writeText(url).then(() => {
-        btn.innerHTML = '<span class="btn-icon">✅</span> Lenke kopiert!';
+        btn.innerHTML = `<span class="btn-icon">✅</span> <span data-i18n="link_copied">${typeof t === 'function' ? t('link_copied') : 'Lenke kopiert!'}</span>`;
         setTimeout(() => {
-            btn.innerHTML = '<span class="btn-icon">🔗</span> Del beregning';
+            btn.innerHTML = `<span class="btn-icon">🔗</span> <span data-i18n="share_calculation">${typeof t === 'function' ? t('share_calculation') : 'Del beregning'}</span>`;
         }, 2000);
     });
 });
 
 // Apply URL parameters if present
 function applyUrlParams() {
+    if (!antallBrukere) return false;
     const params = new URLSearchParams(window.location.search);
     if (!params.has('brukere')) return false;
 
@@ -305,7 +309,7 @@ function applyUrlParams() {
 
     for (const [key, slider] of Object.entries(mapping)) {
         const val = parseInt(params.get(key));
-        if (!isNaN(val)) {
+        if (!isNaN(val) && slider) {
             slider.value = val;
         }
     }
@@ -341,94 +345,98 @@ function applyUrlParams() {
         const val = parseInt(params.get('investering'));
         if (!isNaN(val)) investeringPerBruker.value = val;
     }
-
+    
     return true;
 }
 
-// PDF Export functionality
-document.getElementById('exportPdf').addEventListener('click', function() {
+   // PDF Export functionality
+const exportPdfBtn = document.getElementById('exportPdf');
+if (exportPdfBtn) exportPdfBtn.addEventListener('click', function() {
     const btn = this;
     btn.disabled = true;
-    btn.innerHTML = '<span class="btn-icon">⏳</span> Genererer PDF...';
+    btn.innerHTML = `<span class="btn-icon">⏳</span> <span data-i18n="generating_pdf">${typeof t === 'function' ? t('generating_pdf') : 'Genererer PDF...'}</span>`;
 
     // Create a clean version for PDF
     const pdfContent = document.createElement('div');
 
     let pdfInputRows;
     if (isHjemmebesok) {
-        pdfInputRows = `<tr><td style="padding: 8px 0; color: #666;">Antall brukere</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} brukere</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Besøk per bruker per uke</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} besøk</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Tid hos bruker per besøk</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} minutter</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Reisetid tur/retur per besøk</td><td style="text-align: right; font-weight: 600;">${reisetidSlider.value} minutter</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Tid per digitalt besøk</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} minutter</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Digitaliseringsgrad</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}%</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Kommunal timekostnad</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} NOK</td></tr>
-           ${lisensPerBruker ? `<tr><td style="padding: 8px 0; color: #666;">Månedlig lisens per bruker</td><td style="text-align: right; font-weight: 600;">${lisensPerBruker.value} NOK</td></tr>` : ''}
-           ${investeringPerBruker ? `<tr><td style="padding: 8px 0; color: #666;">Investering per bruker</td><td style="text-align: right; font-weight: 600;">${formatNumber(investeringPerBruker.value)} NOK</td></tr>` : ''}`;
+        pdfInputRows = `<tr><td style="padding: 8px 0; color: #666;">${t('number_of_users')}</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} ${t('users')}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${t('visits_per_week')}</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} ${t('visits')}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${t('time_per_visit')}</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} ${t('minutes')}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${t('travel_time_roundtrip')}</td><td style="text-align: right; font-weight: 600;">${reisetidSlider.value} ${t('minutes')}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${t('time_per_digital_visit')}</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} ${t('minutes')}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${t('share_visits_digitalized')}</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}${t('percent')}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${t('municipal_hourly_rate')}</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} ${t('currency_nok')}</td></tr>
+           ${lisensPerBruker ? `<tr><td style="padding: 8px 0; color: #666;">${t('monthly_license_per_user')}</td><td style="text-align: right; font-weight: 600;">${lisensPerBruker.value} ${t('currency_nok')}</td></tr>` : ''}
+           ${investeringPerBruker ? `<tr><td style="padding: 8px 0; color: #666;">${t('investment_per_user')}</td><td style="text-align: right; font-weight: 600;">${formatNumber(investeringPerBruker.value)} ${t('currency_nok')}</td></tr>` : ''}`;
     } else if (isDailyModel) {
-        pdfInputRows = `<tr><td style="padding: 8px 0; color: #666;">Antall ${isSykehjem ? 'beboere' : 'brukere'}</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} ${isSykehjem ? 'beboere' : 'brukere'}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Tilsyn per ${isSykehjem ? 'beboer' : 'bruker'} per dag</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} tilsyn</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Tid per fysisk tilsyn</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} minutter</td></tr>
-           ${kjoretidSlider ? `<tr><td style="padding: 8px 0; color: #666;">Kjøretid per fysisk tilsyn</td><td style="text-align: right; font-weight: 600;">${kjoretidSlider.value} minutter</td></tr>` : ''}
-           <tr><td style="padding: 8px 0; color: #666;">Tid per digitalt tilsyn</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} minutter</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Digitaliseringsgrad</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}%</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">Kommunal timekostnad</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} NOK</td></tr>
-           ${lisensPerKamera ? `<tr><td style="padding: 8px 0; color: #666;">Månedlig lisens per kamera</td><td style="text-align: right; font-weight: 600;">${lisensPerKamera.value} NOK</td></tr>` : ''}
-           ${investeringPerKamera ? `<tr><td style="padding: 8px 0; color: #666;">Investering per kamera</td><td style="text-align: right; font-weight: 600;">${formatNumber(investeringPerKamera.value)} NOK</td></tr>` : ''}`;
+        const beboereText = isSykehjem ? t('residents') : t('users');
+        const tilsynDagText = isSykehjem ? t('checks_per_day_sykehjem') : t('checks_per_day_hjemmeboende');
+        
+        pdfInputRows = `<tr><td style="padding: 8px 0; color: #666;">${t('number_of_users')}</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} ${beboereText}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${tilsynDagText}</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} ${t('checks')}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${t('time_per_physical_check')}</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} ${t('minutes')}</td></tr>
+           ${kjoretidSlider ? `<tr><td style="padding: 8px 0; color: #666;">${t('driving_time_roundtrip')}</td><td style="text-align: right; font-weight: 600;">${kjoretidSlider.value} ${t('minutes')}</td></tr>` : ''}
+           <tr><td style="padding: 8px 0; color: #666;">${t('time_per_digital_check')}</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} ${t('minutes')}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${t('share_checks_digitalized')}</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}${t('percent')}</td></tr>
+           <tr><td style="padding: 8px 0; color: #666;">${t('municipal_hourly_rate')}</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} ${t('currency_nok')}</td></tr>
+           ${lisensPerKamera ? `<tr><td style="padding: 8px 0; color: #666;">${t('monthly_license_per_camera')}</td><td style="text-align: right; font-weight: 600;">${lisensPerKamera.value} ${t('currency_nok')}</td></tr>` : ''}
+           ${investeringPerKamera ? `<tr><td style="padding: 8px 0; color: #666;">${t('investment_per_camera')}</td><td style="text-align: right; font-weight: 600;">${formatNumber(investeringPerKamera.value)} ${t('currency_nok')}</td></tr>` : ''}`;
     }
 
     const getVal = (id) => { const el = document.getElementById(id); return el ? el.textContent : '0'; };
 
     let pdfResultRows;
     if (isHjemmebesok) {
-        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Økonomi</td></tr>
-           <tr><td style="padding: 8px 0;">Payback-tid</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('paybackTid')} mnd</td></tr>
-           <tr><td style="padding: 8px 0;">5-års netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('femAarsGevinst')} NOK</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Operasjonell nytte</td></tr>
-           <tr><td style="padding: 8px 0;">Totale timer spart per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} timer</td></tr>
-           <tr><td style="padding: 8px 0;">Spart reisetid per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('spartReisetidAar')} timer</td></tr>
-           <tr><td style="padding: 8px 0;">Erstattede fysiske besøk per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('erstattedeBesokAar')} besøk</td></tr>
-           <tr><td style="padding: 8px 0;">Frigjorte årsverk</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} FTE</td></tr>`;
+        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">${t('yearly_net_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} ${t('currency_nok')}</td></tr>
+           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('economy')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('payback_time')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('paybackTid')} ${t('months')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('five_year_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('femAarsGevinst')} ${t('currency_nok')}</td></tr>
+           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('operational_benefit')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('total_hours_saved')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} ${t('hours')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('saved_travel_time')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('spartReisetidAar')} ${t('hours')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('replaced_physical_visits')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('erstattedeBesokAar')} ${t('visits')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('freed_fte')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} ${t('fte')}</td></tr>`;
     } else if (isDailyModel) {
-        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">Årlig netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} NOK</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Økonomi</td></tr>
-           <tr><td style="padding: 8px 0;">Payback-tid</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('paybackTid')} mnd</td></tr>
-           <tr><td style="padding: 8px 0;">5-års netto gevinst</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('femAarsGevinst')} NOK</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Kapasitet</td></tr>
-           <tr><td style="padding: 8px 0;">Frigjorte årsverk</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} FTE</td></tr>
-           <tr><td style="padding: 8px 0;">Økt kapasitet</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('ekstraKapasitet')} flere beboere</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">Aktivitet</td></tr>
+        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">${t('yearly_net_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} ${t('currency_nok')}</td></tr>
+           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('economy')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('payback_time')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('paybackTid')} ${t('months')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('five_year_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('femAarsGevinst')} ${t('currency_nok')}</td></tr>
+           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('capacity')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('freed_fte')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} ${t('fte')}</td></tr>
+           <tr><td style="padding: 8px 0;">${t('increased_capacity')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('ekstraKapasitet')} ${isSykehjem ? t('more_residents') : t('more_users')}</td></tr>
+           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('activity')}</td></tr>
            ${isHjemmeboende
-               ? `<tr><td style="padding: 8px 0;">Timer spart i bil per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartBilAar')} timer</td></tr>`
-               : `<tr><td style="padding: 8px 0;">Unngåtte fysiske tilsyn per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('unngaatteTilsynAar')} tilsyn</td></tr>`}
-           <tr><td style="padding: 8px 0;">Timer spart per år</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} timer</td></tr>`;
+               ? `<tr><td style="padding: 8px 0;">${t('hours_saved_car')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartBilAar')} ${t('hours')}</td></tr>`
+               : `<tr><td style="padding: 8px 0;">${t('avoided_physical_checks')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('unngaatteTilsynAar')} ${t('checks')}</td></tr>`}
+           <tr><td style="padding: 8px 0;">${t('hours_saved_year')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} ${t('hours')}</td></tr>`;
     }
 
     pdfContent.innerHTML = `
         <div style="font-family: 'Segoe UI', sans-serif; padding: 40px; max-width: 800px;">
             <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #4ECDC4; margin: 0;">${document.querySelector('header h1').textContent}</h1>
-                <p style="color: #666; margin: 5px 0;">Lønnsomhetskalkulator - Resultat</p>
-                <p style="color: #999; font-size: 12px;">${new Date().toLocaleDateString('no-NO')}</p>
+                <h1 style="color: #4ECDC4; margin: 0;">${document.querySelector('header h1') ? document.querySelector('header h1').textContent : t('calculated_gain')}</h1>
+                <p style="color: #666; margin: 5px 0;">${t('pdf_subtitle')}</p>
+                <p style="color: #999; font-size: 12px;">${new Date().toLocaleDateString(currentLang === 'en' ? 'en-US' : (currentLang === 'sv' ? 'sv-SE' : 'no-NO'))}</p>
             </div>
 
             <div style="background: #f5f7fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                <h2 style="color: #2c3e50; font-size: 16px; margin: 0 0 15px 0;">Dine forutsetninger</h2>
+                <h2 style="color: #2c3e50; font-size: 16px; margin: 0 0 15px 0;">${t('your_assumptions')}</h2>
                 <table style="width: 100%; border-collapse: collapse;">
                     ${pdfInputRows}
                 </table>
             </div>
 
             <div style="background: linear-gradient(135deg, #4ECDC4, #3DB8B0); padding: 25px; border-radius: 8px; color: white;">
-                <h2 style="font-size: 16px; margin: 0 0 15px 0;">Beregnet gevinst</h2>
+                <h2 style="font-size: 16px; margin: 0 0 15px 0;">${t('calculated_gain')}</h2>
                 <table style="width: 100%; border-collapse: collapse;">
                     ${pdfResultRows}
                 </table>
             </div>
 
             <p style="text-align: center; color: #999; font-size: 11px; margin-top: 30px;">
-                Kalkulatoren gir et estimat basert på oppgitte verdier. Faktiske besparelser kan variere.
+                ${t('footer_text')}
             </p>
         </div>
     `;
@@ -443,7 +451,7 @@ document.getElementById('exportPdf').addEventListener('click', function() {
 
     html2pdf().set(opt).from(pdfContent).save().then(() => {
         btn.disabled = false;
-        btn.innerHTML = '<span class="btn-icon">📄</span> Last ned som PDF';
+        btn.innerHTML = `<span class="btn-icon">📄</span> <span data-i18n="download_pdf">${typeof t === 'function' ? t('download_pdf') : 'Last ned som PDF'}</span>`;
     });
 });
 
@@ -507,6 +515,130 @@ function init() {
 
     // Init hjemmebesøk-specific features
     initAdvancedToggle();
+    
+    // Initialize i18n
+    initI18n();
+}
+
+// Internationalization (i18n) setup
+let currentLang = localStorage.getItem('selectedLang') || 'no';
+
+function t(key) {
+    if (typeof getTranslation === 'function') {
+        return getTranslation(currentLang, key);
+    }
+    return key;
+}
+
+function translatePage() {
+    if (typeof translations === 'undefined') return;
+    
+    // Basic text translation
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        element.textContent = t(key);
+    });
+
+    // Tooltip translation
+    document.querySelectorAll('[data-i18n-tooltip]').forEach(element => {
+        const key = element.getAttribute('data-i18n-tooltip');
+        element.setAttribute('data-tooltip', t(key));
+    });
+
+    // Placeholder translation
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-i18n-placeholder');
+        element.setAttribute('placeholder', t(key));
+    });
+    
+    // Update HTML lang attribute
+    document.documentElement.lang = currentLang;
+}
+
+function setupCustomLanguageSelector() {
+    const originalSelect = document.getElementById('langSelect');
+    if (!originalSelect || originalSelect.dataset.customized) return;
+    originalSelect.dataset.customized = 'true';
+
+    // Hide original select
+    originalSelect.style.display = 'none';
+
+    // Create wrapper
+    const wrapper = document.createElement('div');
+    wrapper.className = 'custom-lang-select';
+    originalSelect.parentNode.insertBefore(wrapper, originalSelect);
+
+    const selectedDiv = document.createElement('div');
+    selectedDiv.className = 'lang-select-selected';
+    
+    const itemsDiv = document.createElement('div');
+    itemsDiv.className = 'lang-select-items lang-select-hide';
+
+    const flags = {
+        'no': 'https://flagcdn.com/w20/no.png',
+        'en': 'https://flagcdn.com/w20/gb.png',
+        'sv': 'https://flagcdn.com/w20/se.png'
+    };
+
+    function updateSelected(value, text) {
+        selectedDiv.innerHTML = `<img src="${flags[value]}" alt="${value}" class="lang-flag"> ${text}`;
+    }
+
+    // Populate items
+    Array.from(originalSelect.options).forEach(option => {
+        // Remove emoji from option text since we added them in HTML
+        const cleanText = option.text.replace(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]\s*/g, '').trim();
+        
+        const item = document.createElement('div');
+        item.innerHTML = `<img src="${flags[option.value]}" alt="${option.value}" class="lang-flag"> ${cleanText}`;
+        item.addEventListener('click', function(e) {
+            originalSelect.value = option.value;
+            updateSelected(option.value, cleanText);
+            itemsDiv.classList.add('lang-select-hide');
+            // Trigger change event manually
+            originalSelect.dispatchEvent(new Event('change'));
+        });
+        itemsDiv.appendChild(item);
+    });
+
+    // Initial selected value
+    const initialOption = originalSelect.options[originalSelect.selectedIndex];
+    const initialCleanText = initialOption ? initialOption.text.replace(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]\s*/g, '').trim() : 'Norsk';
+    updateSelected(originalSelect.value || 'no', initialCleanText);
+
+    wrapper.appendChild(selectedDiv);
+    wrapper.appendChild(itemsDiv);
+
+    // Toggle dropdown
+    selectedDiv.addEventListener('click', function(e) {
+        e.stopPropagation();
+        itemsDiv.classList.toggle('lang-select-hide');
+        selectedDiv.classList.toggle('lang-select-arrow-active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function() {
+        itemsDiv.classList.add('lang-select-hide');
+        selectedDiv.classList.remove('lang-select-arrow-active');
+    });
+}
+
+function initI18n() {
+    const langSelect = document.getElementById('langSelect');
+    if (langSelect) {
+        langSelect.value = currentLang;
+    }
+    setupCustomLanguageSelector();
+    
+    if (langSelect) {
+        // Also update custom dropdown UI
+        langSelect.addEventListener('change', (e) => {
+            currentLang = e.target.value;
+            localStorage.setItem('selectedLang', currentLang);
+            translatePage();
+        });
+    }
+    translatePage();
 }
 
 // Run init when DOM is ready (only once)

@@ -10,25 +10,34 @@
 <body data-page="hjemmeboende">
     <div class="container">
         <header>
-            <a href="tilsyn.html" class="back-link">&#8592; Tilbake til tjenestevalg</a>
-            <h1>Gevinstkalkulator for digitalt tilsyn for hjemmeboende</h1>
+            <div class="header-top">
+                <a href="tilsyn.html" class="back-link" data-i18n="back_to_service_selection">&#8592; Tilbake til tjenestevalg</a>
+                <div class="language-selector">
+                    <select id="langSelect">
+                        <option value="no">🇳🇴 Norsk</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="sv">🇸🇪 Svenska</option>
+                    </select>
+                </div>
+            </div>
+            <h1 data-i18n="calc_hjemmeboende_title">Gevinstkalkulator for digitalt tilsyn for hjemmeboende</h1>
         </header>
 
         <!-- User count selection overlay -->
         <div id="userSelectionOverlay" class="user-selection-overlay">
             <div class="user-selection-card">
                 <div class="user-selection-icon">👥</div>
-                <h2>Hvor mange brukere mottar tjenesten?</h2>
-                <p>Velg antall brukere for å starte beregningen</p>
+                <h2 data-i18n="how_many_users">Hvor mange brukere mottar tjenesten?</h2>
+                <p data-i18n="choose_user_count">Velg antall brukere for å starte beregningen</p>
                 <div class="user-selection-options">
                     <button class="user-option-btn" data-value="20">20</button>
                     <button class="user-option-btn" data-value="50">50</button>
                     <button class="user-option-btn" data-value="100">100</button>
-                    <button class="user-option-btn custom-btn" id="customOptionBtn">Egendefinert</button>
+                    <button class="user-option-btn custom-btn" id="customOptionBtn" data-i18n="custom">Egendefinert</button>
                 </div>
                 <div class="custom-input-row" id="customInputRow" style="display: none;">
-                    <input type="number" id="customUserCount" min="1" max="500" placeholder="Skriv inn antall...">
-                    <button class="user-option-confirm" id="customConfirmBtn">Bekreft</button>
+                    <input type="number" id="customUserCount" min="1" max="500" placeholder="Skriv inn antall..." data-i18n-placeholder="enter_amount">
+                    <button class="user-option-confirm" id="customConfirmBtn" data-i18n="confirm">Bekreft</button>
                 </div>
             </div>
         </div>
@@ -37,45 +46,45 @@
             <section class="results-section">
                 <div class="section-header">
                     <span class="section-icon">💰</span>
-                    <h2>Beregnet gevinst</h2>
+                    <h2 data-i18n="calculated_gain">Beregnet gevinst</h2>
                 </div>
 
                 <div class="results-grid">
                     <div class="result-card highlight">
                         <div class="result-label">
-                            Årlig netto gevinst
-                            <button class="info-btn light" data-tooltip="Brutto besparelse minus årlig kostnad for løsningen (lisens, hardware, drift)">i</button>
+                            <span data-i18n="yearly_net_gain">Årlig netto gevinst</span>
+                            <button class="info-btn light" data-tooltip="Brutto besparelse minus årlig kostnad for løsningen (lisens, hardware, drift)" data-i18n-tooltip="yearly_net_gain_tooltip_tilsyn">i</button>
                         </div>
                         <div class="result-value large">
                             <span id="arligGevinst">0</span>
-                            <span class="result-unit">NOK</span>
+                            <span class="result-unit" data-i18n="currency_nok">NOK</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- ØKONOMI -->
                 <div class="results-section-group">
-                    <div class="section-subheader">Økonomi</div>
+                    <div class="section-subheader" data-i18n="economy">Økonomi</div>
                     <div class="results-grid">
                         <div class="result-card">
                             <div class="result-label">
-                                Payback-tid
-                                <button class="info-btn" data-tooltip="Tid før investeringen er tjent inn (investering / månedlig netto gevinst)">i</button>
+                                <span data-i18n="payback_time">Payback-tid</span>
+                                <button class="info-btn" data-tooltip="Tid før investeringen er tjent inn (investering / månedlig netto gevinst)" data-i18n-tooltip="payback_time_tooltip">i</button>
                             </div>
                             <div class="result-value">
                                 <span id="paybackTid">0</span>
-                                <span class="result-unit">måneder</span>
+                                <span class="result-unit" data-i18n="months">måneder</span>
                             </div>
                         </div>
 
                         <div class="result-card">
                             <div class="result-label">
-                                5-års netto gevinst
-                                <button class="info-btn" data-tooltip="Total netto gevinst over 5 år minus initial investering">i</button>
+                                <span data-i18n="five_year_gain">5-års netto gevinst</span>
+                                <button class="info-btn" data-tooltip="Total netto gevinst over 5 år minus initial investering" data-i18n-tooltip="five_year_gain_tooltip">i</button>
                             </div>
                             <div class="result-value">
                                 <span id="femAarsGevinst">0</span>
-                                <span class="result-unit">NOK</span>
+                                <span class="result-unit" data-i18n="currency_nok">NOK</span>
                             </div>
                         </div>
                     </div>
@@ -83,27 +92,27 @@
 
                 <!-- KAPASITET -->
                 <div class="results-section-group">
-                    <div class="section-subheader">Kapasitet</div>
+                    <div class="section-subheader" data-i18n="capacity">Kapasitet</div>
                     <div class="results-grid">
                         <div class="result-card">
                             <div class="result-label">
-                                Frigjorte årsverk
-                                <button class="info-btn" data-tooltip="Antall hele årsverk frigjort (timer spart per år / 1 695 arbeidstimer)">i</button>
+                                <span data-i18n="freed_fte">Frigjorte årsverk</span>
+                                <button class="info-btn" data-tooltip="Antall hele årsverk frigjort (timer spart per år / 1 695 arbeidstimer)" data-i18n-tooltip="freed_fte_tooltip">i</button>
                             </div>
                             <div class="result-value">
                                 <span id="frigjorteAarsverk">0</span>
-                                <span class="result-unit">FTE</span>
+                                <span class="result-unit" data-i18n="fte">FTE</span>
                             </div>
                         </div>
 
                         <div class="result-card">
                             <div class="result-label">
-                                Økt kapasitet
-                                <button class="info-btn" data-tooltip="Antall ekstra brukere samme bemanning kan håndtere med frigjort tid">i</button>
+                                <span data-i18n="increased_capacity">Økt kapasitet</span>
+                                <button class="info-btn" data-tooltip="Antall ekstra brukere samme bemanning kan håndtere med frigjort tid" data-i18n-tooltip="increased_capacity_tooltip_users">i</button>
                             </div>
                             <div class="result-value">
                                 <span id="ekstraKapasitet">0</span>
-                                <span class="result-unit">flere brukere</span>
+                                <span class="result-unit" data-i18n="more_users">flere brukere</span>
                             </div>
                         </div>
                     </div>
@@ -111,27 +120,27 @@
 
                 <!-- AKTIVITET -->
                 <div class="results-section-group">
-                    <div class="section-subheader">Aktivitet</div>
+                    <div class="section-subheader" data-i18n="activity">Aktivitet</div>
                     <div class="results-grid">
                         <div class="result-card">
                             <div class="result-label">
-                                Timer spart i bil per år
-                                <button class="info-btn" data-tooltip="Antall timer spart på kjøring per år ved digitalisering av tilsyn">i</button>
+                                <span data-i18n="hours_saved_car">Timer spart i bil per år</span>
+                                <button class="info-btn" data-tooltip="Antall timer spart på kjøring per år ved digitalisering av tilsyn" data-i18n-tooltip="hours_saved_car_tooltip">i</button>
                             </div>
                             <div class="result-value">
                                 <span id="timerSpartBilAar">0</span>
-                                <span class="result-unit">timer</span>
+                                <span class="result-unit" data-i18n="hours">timer</span>
                             </div>
                         </div>
 
                         <div class="result-card">
                             <div class="result-label">
-                                Timer spart per år
-                                <button class="info-btn" data-tooltip="Totalt antall timer spart per år ved digitalisering">i</button>
+                                <span data-i18n="hours_saved_year">Timer spart per år</span>
+                                <button class="info-btn" data-tooltip="Totalt antall timer spart per år ved digitalisering" data-i18n-tooltip="hours_saved_year_tooltip">i</button>
                             </div>
                             <div class="result-value">
                                 <span id="timerSpartAar">0</span>
-                                <span class="result-unit">timer</span>
+                                <span class="result-unit" data-i18n="hours">timer</span>
                             </div>
                         </div>
                     </div>
@@ -141,135 +150,135 @@
             <section class="input-section">
                 <div class="section-header">
                     <span class="section-icon">📊</span>
-                    <h2>Dine forutsetninger</h2>
+                    <h2 data-i18n="your_assumptions">Dine forutsetninger</h2>
                 </div>
 
-                <div class="input-subheader">Volum</div>
+                <div class="input-subheader" data-i18n="volume">Volum</div>
 
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="antallBrukere">Antall brukere som mottar tjenesten</label>
-                        <button class="info-btn" data-tooltip="Totalt antall hjemmeboende brukere som mottar tilsyn">i</button>
+                        <label for="antallBrukere" data-i18n="number_of_users">Antall brukere som mottar tjenesten</label>
+                        <button class="info-btn" data-tooltip="Totalt antall hjemmeboende brukere som mottar tilsyn" data-i18n-tooltip="number_of_users_tooltip_hjemmeboende">i</button>
                     </div>
                     <div class="slider-container">
                         <input type="range" id="antallBrukere" min="1" max="500" value="50">
                         <div class="slider-value">
                             <input type="number" id="antallBrukereValue" class="editable-value" value="50" min="1" max="500">
-                            <span class="unit">brukere</span>
+                            <span class="unit" data-i18n="users">brukere</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="besokPerUke">Antall tilsyn per bruker per døgn</label>
-                        <button class="info-btn" data-tooltip="Gjennomsnittlig antall tilsyn hver bruker får per døgn">i</button>
+                        <label for="besokPerUke" data-i18n="checks_per_day_hjemmeboende">Antall tilsyn per bruker per døgn</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig antall tilsyn hver bruker får per døgn" data-i18n-tooltip="checks_per_day_hjemmeboende_tooltip">i</button>
                     </div>
                     <div class="slider-container">
                         <input type="range" id="besokPerUke" min="1" max="10" value="3">
                         <div class="slider-value">
                             <input type="number" id="besokPerUkeValue" class="editable-value" value="3" min="1" max="10">
-                            <span class="unit">tilsyn</span>
+                            <span class="unit" data-i18n="checks">tilsyn</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="input-subheader">Digitaliseringsgrad</div>
+                <div class="input-subheader" data-i18n="digitalization_degree">Digitaliseringsgrad</div>
 
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="digitaliseringsgrad">Andel tilsyn som digitaliseres</label>
-                        <button class="info-btn" data-tooltip="Andel av tilsynene som kan erstattes med digitale løsninger">i</button>
+                        <label for="digitaliseringsgrad" data-i18n="share_checks_digitalized">Andel tilsyn som digitaliseres</label>
+                        <button class="info-btn" data-tooltip="Andel av tilsynene som kan erstattes med digitale løsninger" data-i18n-tooltip="share_checks_digitalized_tooltip">i</button>
                     </div>
                     <div class="slider-container">
                         <input type="range" id="digitaliseringsgrad" min="5" max="100" step="5" value="80">
                         <div class="slider-value">
                             <input type="number" id="digitaliseringsgradValue" class="editable-value" value="80" min="5" max="100" step="5">
-                            <span class="unit">%</span>
+                            <span class="unit" data-i18n="percent">%</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="input-subheader">Tidsbruk</div>
+                <div class="input-subheader" data-i18n="time_usage">Tidsbruk</div>
 
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="tidPerBesok">Tidsbruk per fysisk tilsyn (minutter)</label>
-                        <button class="info-btn" data-tooltip="Gjennomsnittlig tid brukt på hvert fysiske tilsyn, inkludert reisetid">i</button>
+                        <label for="tidPerBesok" data-i18n="time_per_physical_check">Tidsbruk per fysisk tilsyn (minutter)</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig tid brukt på hvert fysiske tilsyn, inkludert reisetid" data-i18n-tooltip="time_per_physical_check_tooltip_hjemmeboende">i</button>
                     </div>
                     <div class="slider-container">
                         <input type="range" id="tidPerBesok" min="1" max="30" step="1" value="5">
                         <div class="slider-value">
                             <input type="number" id="tidPerBesokValue" class="editable-value" value="5" min="1" max="30" step="1">
-                            <span class="unit">min</span>
+                            <span class="unit" data-i18n="minutes">min</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="kjoretid">Kjøretid per fysisk tilsyn (minutter)</label>
-                        <button class="info-btn" data-tooltip="Gjennomsnittlig kjøretid tur/retur for hvert fysiske tilsyn">i</button>
+                        <label for="kjoretid" data-i18n="driving_time_roundtrip">Kjøretid per fysisk tilsyn (minutter)</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig kjøretid tur/retur for hvert fysiske tilsyn" data-i18n-tooltip="driving_time_roundtrip_tooltip">i</button>
                     </div>
                     <div class="slider-container">
                         <input type="range" id="kjoretid" min="1" max="60" step="1" value="15">
                         <div class="slider-value">
                             <input type="number" id="kjoretidValue" class="editable-value" value="15" min="1" max="60" step="1">
-                            <span class="unit">min</span>
+                            <span class="unit" data-i18n="minutes">min</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <div class="input-label">
-                        <label for="tidPerDigitaltBesok">Tidsbruk per digitalt tilsyn (minutter)</label>
-                        <button class="info-btn" data-tooltip="Gjennomsnittlig tid brukt på hvert digitale tilsyn">i</button>
+                        <label for="tidPerDigitaltBesok" data-i18n="time_per_digital_check">Tidsbruk per digitalt tilsyn (minutter)</label>
+                        <button class="info-btn" data-tooltip="Gjennomsnittlig tid brukt på hvert digitale tilsyn" data-i18n-tooltip="time_per_digital_check_tooltip">i</button>
                     </div>
                     <div class="slider-container">
                         <input type="range" id="tidPerDigitaltBesok" min="1" max="15" step="1" value="1">
                         <div class="slider-value">
                             <input type="number" id="tidPerDigitaltBesokValue" class="editable-value" value="1" min="1" max="15" step="1">
-                            <span class="unit">min</span>
+                            <span class="unit" data-i18n="minutes">min</span>
                         </div>
                     </div>
                 </div>
 
                 <button class="advanced-toggle" id="advancedToggle">
-                    <span>Vis økonomiske detaljer</span>
+                    <span data-i18n="show_economic_details">Vis økonomiske detaljer</span>
                     <span class="advanced-toggle-icon"></span>
                 </button>
 
                 <div class="advanced-inputs" id="advancedInputs" style="display: none;">
                     <div class="input-group">
                         <div class="input-label">
-                            <label for="timekostnad">Kommunal timekostnad</label>
-                            <button class="info-btn" data-tooltip="Gjennomsnittlig timekostnad for kommunalt ansatte inkludert alle kostnader">i</button>
+                            <label for="timekostnad" data-i18n="municipal_hourly_rate">Kommunal timekostnad</label>
+                            <button class="info-btn" data-tooltip="Gjennomsnittlig timekostnad for kommunalt ansatte inkludert alle kostnader" data-i18n-tooltip="municipal_hourly_rate_tooltip">i</button>
                         </div>
                         <div class="number-input-container">
                             <input type="number" id="timekostnad" min="300" max="1500" value="600">
-                            <span class="currency">NOK</span>
+                            <span class="currency" data-i18n="currency_nok">NOK</span>
                         </div>
                     </div>
 
                     <div class="input-group">
                         <div class="input-label">
-                            <label for="lisensPerKamera">Månedlig lisens per kamera</label>
-                            <button class="info-btn" data-tooltip="Månedlig lisenskostnad per kamera/enhet for den digitale løsningen. Veiledende pris – kan variere avhengig av avtale og kontraktstype">i</button>
+                            <label for="lisensPerKamera" data-i18n="monthly_license_per_camera">Månedlig lisens per kamera</label>
+                            <button class="info-btn" data-tooltip="Månedlig lisenskostnad per kamera/enhet for den digitale løsningen. Veiledende pris – kan variere avhengig av avtale og kontraktstype" data-i18n-tooltip="monthly_license_per_camera_tooltip">i</button>
                         </div>
                         <div class="number-input-container">
                             <input type="number" id="lisensPerKamera" min="0" max="2000" value="500">
-                            <span class="currency">NOK</span>
+                            <span class="currency" data-i18n="currency_nok">NOK</span>
                         </div>
                     </div>
 
                     <div class="input-group">
                         <div class="input-label">
-                            <label for="investeringPerKamera">Investering per kamera</label>
-                            <button class="info-btn" data-tooltip="Engangsinvestering per kamera/enhet (hardware, installasjon). Veiledende pris – kan variere avhengig av avtale og kontraktstype">i</button>
+                            <label for="investeringPerKamera" data-i18n="investment_per_camera">Investering per kamera</label>
+                            <button class="info-btn" data-tooltip="Engangsinvestering per kamera/enhet (hardware, installasjon). Veiledende pris – kan variere avhengig av avtale og kontraktstype" data-i18n-tooltip="investment_per_camera_tooltip">i</button>
                         </div>
                         <div class="number-input-container">
                             <input type="number" id="investeringPerKamera" min="0" max="50000" value="5000">
-                            <span class="currency">NOK</span>
+                            <span class="currency" data-i18n="currency_nok">NOK</span>
                         </div>
                     </div>
                 </div>
@@ -279,11 +288,11 @@
                 <div class="action-buttons">
                     <button id="exportPdf" class="action-btn pdf-btn">
                         <span class="btn-icon">📄</span>
-                        Last ned som PDF
+                        <span data-i18n="download_pdf">Last ned som PDF</span>
                     </button>
                     <button id="shareBtn" class="action-btn share-btn">
                         <span class="btn-icon">🔗</span>
-                        Del beregning
+                        <span data-i18n="share_calculation">Del beregning</span>
                     </button>
                 </div>
             </section>
@@ -292,7 +301,7 @@
                 <details>
                     <summary>
                         <span class="formula-icon">📐</span>
-                        <span>Vis beregningsformel</span>
+                        <span data-i18n="show_formula">Vis beregningsformel</span>
                         <span class="expand-icon"></span>
                     </summary>
                     <div class="formula-content">
@@ -326,10 +335,11 @@
         </main>
 
         <footer>
-            <p>Kalkulatoren gir et estimat basert på oppgitte verdier. Faktiske besparelser kan variere.</p>
+            <p data-i18n="footer_text">Kalkulatoren gir et estimat basert på oppgitte verdier. Faktiske besparelser kan variere.</p>
         </footer>
     </div>
 
+    <script src="translations.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -9,28 +9,39 @@
 <body>
     <div class="container">
         <header>
-            <a href="index.html" class="back-link">&#8592; Tilbake til tjenesteoversikt</a>
-            <h1>TelluVision - digitalt tilsyn</h1>
-            <p class="subtitle">Velg hvilken bosituasjon du vil beregne gevinstpotensialet for</p>
+            <div class="header-top">
+                <a href="index.html" class="back-link" data-i18n="back_to_overview">&#8592; Tilbake til tjenesteoversikt</a>
+                <div class="language-selector">
+                    <select id="langSelect">
+                        <option value="no">🇳🇴 Norsk</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="sv">🇸🇪 Svenska</option>
+                    </select>
+                </div>
+            </div>
+            <h1 data-i18n="tilsyn_page_title">TelluVision - digitalt tilsyn</h1>
+            <p class="subtitle" data-i18n="tilsyn_page_subtitle">Velg hvilken bosituasjon du vil beregne gevinstpotensialet for</p>
         </header>
 
         <div class="service-selection">
             <a href="tilsyn-sykehjem.html" class="service-card">
                 <span class="service-icon">🏥</span>
-                <h2>Sykehjem og omsorgsbolig</h2>
-                <p>Beboere som har heldøgns omsorg i institusjon eller bemannet omsorgsbolig</p>
+                <h2 data-i18n="sykehjem_title">Sykehjem og omsorgsbolig</h2>
+                <p data-i18n="sykehjem_desc">Beboere som har heldøgns omsorg i institusjon eller bemannet omsorgsbolig</p>
             </a>
 
             <a href="tilsyn-hjemmeboende.html" class="service-card">
                 <span class="service-icon">🧑‍🦳</span>
-                <h2>Hjemmeboende</h2>
-                <p>Brukere som bor i eget hjem og mottar tilsynstjenester fra kommunen</p>
+                <h2 data-i18n="hjemmeboende_title">Hjemmeboende</h2>
+                <p data-i18n="hjemmeboende_desc">Brukere som bor i eget hjem og mottar tilsynstjenester fra kommunen</p>
             </a>
         </div>
 
         <footer>
-            <p>Kalkulatoren gir et estimat basert på oppgitte verdier. Faktiske besparelser kan variere.</p>
+            <p data-i18n="footer_text">Kalkulatoren gir et estimat basert på oppgitte verdier. Faktiske besparelser kan variere.</p>
         </footer>
     </div>
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

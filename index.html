@@ -9,27 +9,38 @@
 <body>
     <div class="container">
         <header>
-            <h1>Tellus Gevinstkalkulator</h1>
-            <p class="subtitle">Velg hvilken tjeneste du vil beregne gevinstpotensialet for</p>
+            <div class="header-top">
+                <div class="language-selector">
+                    <select id="langSelect">
+                        <option value="no">🇳🇴 Norsk</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="sv">🇸🇪 Svenska</option>
+                    </select>
+                </div>
+            </div>
+            <h1 data-i18n="index_title">Tellus Gevinstkalkulator</h1>
+            <p class="subtitle" data-i18n="index_subtitle">Velg hvilken tjeneste du vil beregne gevinstpotensialet for</p>
         </header>
 
         <div class="service-selection">
             <a href="tilsyn.html" class="service-card">
                 <span class="service-icon">💚</span>
-                <h2>TelluVision - digitalt tilsyn</h2>
-                <p>Beregn besparelser ved å erstatte fysisk tilsyn med digitalt tilsyn</p>
+                <h2 data-i18n="tilsyn_title">TelluVision - digitalt tilsyn</h2>
+                <p data-i18n="tilsyn_desc">Beregn besparelser ved å erstatte fysisk tilsyn med digitalt tilsyn</p>
             </a>
 
             <a href="hjemmebesok.html" class="service-card">
                 <span class="service-icon">🏠</span>
-                <h2>TelluVisit - digitale hjemmebesøk</h2>
-                <p>Beregn besparelser ved å erstatte fysiske hjemmebesøk med digitale besøk</p>
+                <h2 data-i18n="hjemmebesok_title">TelluVisit - digitale hjemmebesøk</h2>
+                <p data-i18n="hjemmebesok_desc">Beregn besparelser ved å erstatte fysiske hjemmebesøk med digitale besøk</p>
             </a>
         </div>
 
         <footer>
-            <p>Kalkulatoren gir et estimat basert på oppgitte verdier. Faktiske besparelser kan variere.</p>
+            <p data-i18n="footer_text">Kalkulatoren gir et estimat basert på oppgitte verdier. Faktiske besparelser kan variere.</p>
         </footer>
     </div>
+    <script src="translations.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

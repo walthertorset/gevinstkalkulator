@@ -19,12 +19,14 @@
     --gradient-main: linear-gradient(135deg, #2EB8AA 0%, #4ECDC4 30%, #D81B84 100%);
 }
 
-body {
+html, body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--background);
     color: var(--text-primary);
     line-height: 1.4;
     min-height: 100vh;
+    overflow-x: hidden;
+    max-width: 100vw;
 }
 
 .container {
@@ -44,7 +46,7 @@ main {
 header {
     position: relative;
     text-align: center;
-    padding: 50px 20px;
+    padding: 25px 20px;
     background: var(--gradient-main);
     border-radius: var(--border-radius);
     color: white;
@@ -778,6 +780,10 @@ details[open] .expand-icon::after {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
     max-width: 500px;
     width: 90%;
+    max-width: 90vw;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .user-selection-icon {
@@ -933,5 +939,150 @@ footer {
     .info-btn::after {
         left: 0;
         transform: translateX(0);
+    }
+}
+
+/* Language Selector */
+.header-top {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    right: 20px;
+    height: 0;
+}
+
+.language-selector {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+}
+
+/* Custom Language Selector */
+.custom-lang-select {
+    position: relative;
+    width: 140px;
+    font-family: inherit;
+    z-index: 100;
+}
+
+.lang-select-selected {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.lang-select-selected:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.lang-select-selected::after {
+    content: "";
+    margin-left: auto;
+    border: 5px solid transparent;
+    border-color: white transparent transparent transparent;
+    margin-top: 5px;
+}
+
+.lang-select-arrow-active::after {
+    border-color: transparent transparent white transparent;
+    margin-top: -5px;
+}
+
+.lang-select-items {
+    position: absolute;
+    background-color: var(--card-bg);
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    border-radius: 8px;
+    margin-top: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.lang-select-hide {
+    display: none;
+}
+
+.lang-select-items div {
+    color: var(--text-primary);
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.lang-select-items div:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.lang-flag {
+    width: 20px;
+    height: auto;
+    border-radius: 2px;
+}
+
+header .back-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+}
+
+/* Responsive adjustments for mobile header */
+@media screen and (max-width: 768px) {
+    .header-top {
+        position: relative;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    .language-selector {
+        position: relative;
+    }
+    header .back-link {
+        position: relative;
+        font-size: 0.9rem;
+        padding: 6px 12px;
+        margin: 0;
+        align-self: center;
+        text-align: center;
+    }
+    .user-selection-card {
+        padding: 25px 15px;
+    }
+    .user-selection-card h2 {
+        font-size: 1.15rem;
+    }
+    .user-selection-options {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .user-option-btn {
+        padding: 12px 6px;
+        font-size: 1rem;
     }
 }
