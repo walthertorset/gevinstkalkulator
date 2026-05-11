@@ -55,9 +55,16 @@ const ukentligVerdi = document.getElementById('ukentligVerdi');
 const arligGevinst = document.getElementById('arligGevinst');
 
 
-// Format number with space as thousand separator (Norwegian format)
+// Format number based on language
 function formatNumber(num) {
-    return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    const separator = currentLang === 'en' ? ',' : ' ';
+    return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+}
+
+// Format decimal based on language
+function formatDecimal(num) {
+    const decimalSeparator = currentLang === 'en' ? '.' : ',';
+    return (Math.round(num * 10) / 10).toString().replace('.', decimalSeparator);
 }
 
 // Update slider progress visual
@@ -135,13 +142,13 @@ function calculate() {
         // Update Økonomi
         arligGevinst.textContent = formatNumber(nettoGevinst);
         const paybackEl = document.getElementById('paybackTid');
-        if (paybackEl) paybackEl.textContent = paybackMnd > 0 ? (Math.round(paybackMnd * 10) / 10).toString().replace('.', ',') : '—';
+        if (paybackEl) paybackEl.textContent = paybackMnd > 0 ? formatDecimal(paybackMnd) : '—';
         const femAarsEl = document.getElementById('femAarsGevinst');
         if (femAarsEl) femAarsEl.textContent = formatNumber(femAarsNetto);
 
         // Update Kapasitet
         const aarsverkEl = document.getElementById('frigjorteAarsverk');
-        if (aarsverkEl) aarsverkEl.textContent = (Math.round(aarsverk * 10) / 10).toString().replace('.', ',');
+        if (aarsverkEl) aarsverkEl.textContent = formatDecimal(aarsverk);
 
         // Update Operasjonell nytte
         const erstattedEl = document.getElementById('erstattedeBesokAar');
@@ -183,15 +190,15 @@ function calculate() {
         // Update Økonomi
         arligGevinst.textContent = formatNumber(nettoGevinst);
         const paybackEl = document.getElementById('paybackTid');
-        if (paybackEl) paybackEl.textContent = paybackMnd > 0 ? (Math.round(paybackMnd * 10) / 10).toString().replace('.', ',') : '—';
+        if (paybackEl) paybackEl.textContent = paybackMnd > 0 ? formatDecimal(paybackMnd) : '—';
         const femAarsEl = document.getElementById('femAarsGevinst');
         if (femAarsEl) femAarsEl.textContent = formatNumber(femAarsNetto);
 
         // Update Kapasitet
         const aarsverkEl = document.getElementById('frigjorteAarsverk');
-        if (aarsverkEl) aarsverkEl.textContent = (Math.round(aarsverk * 10) / 10).toString().replace('.', ',');
+        if (aarsverkEl) aarsverkEl.textContent = formatDecimal(aarsverk);
         const kapasitetEl = document.getElementById('ekstraKapasitet');
-        if (kapasitetEl) kapasitetEl.textContent = Math.round(ekstraBeboere);
+        if (kapasitetEl) kapasitetEl.textContent = formatNumber(ekstraBeboere);
 
         // Update Aktivitet
         const tilsynAarEl = document.getElementById('unngaatteTilsynAar');
@@ -214,9 +221,11 @@ function calculate() {
 
 // Simple animation for result values
 function animateValue(element, newValue) {
-    element.textContent = typeof newValue === 'number' && !Number.isInteger(newValue)
-        ? newValue.toFixed(1).replace('.', ',')
-        : newValue;
+    if (typeof newValue === 'number') {
+        element.textContent = Number.isInteger(newValue) ? formatNumber(newValue) : formatDecimal(newValue);
+    } else {
+        element.textContent = newValue;
+    }
 }
 
 // Advanced toggle logic
@@ -229,7 +238,7 @@ function initAdvancedToggle() {
         const isOpen = advancedInputs.style.display !== 'none';
         advancedInputs.style.display = isOpen ? 'none' : 'block';
         toggleBtn.classList.toggle('open', !isOpen);
-        toggleBtn.querySelector('span:first-child').textContent = isOpen ? 'Vis økonomiske detaljer' : 'Skjul økonomiske detaljer';
+        toggleBtn.querySelector('span:first-child').textContent = isOpen ? t('show_economic_details') : t('hide_economic_details');
     });
 }
 
@@ -553,6 +562,9 @@ function translatePage() {
     
     // Update HTML lang attribute
     document.documentElement.lang = currentLang;
+
+    // Refresh calculation to update formatted numbers and currency
+    calculate();
 }
 
 function setupCustomLanguageSelector() {

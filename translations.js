@@ -21,6 +21,31 @@ const translations = {
         "minutes": "min",
         "percent": "%",
         
+        // Formula
+        "formula_avoided_checks": "Unngåtte tilsyn/dag",
+        "formula_hours_saved": "Timer spart/år",
+        "formula_gross_saving": "Årlig brutto besparelse",
+        "formula_net_gain": "Årlig netto gevinst",
+        "formula_payback": "Payback-tid",
+        "formula_fte": "Frigjorte årsverk",
+        "formula_total_visits_week": "Totale besøk per uke",
+        "formula_replaced_visits_week": "Erstattede besøk per uke",
+        "formula_saved_travel_year": "Spart reisetid per år",
+        "formula_total_time_saved_year": "Total tid spart per år",
+        
+        "formula_avoided_checks_eq": "Brukere × Tilsyn/dag × Digitaliseringsgrad",
+        "formula_avoided_checks_eq_sykehjem": "Beboere × Tilsyn/dag × Digitaliseringsgrad",
+        "formula_hours_saved_eq_hjemmeboende": "Unngåtte tilsyn/dag × (Fysisk tid + Kjøretid − Digital tid) / 60 × 365",
+        "formula_hours_saved_eq_sykehjem": "Unngåtte tilsyn/dag × (Fysisk − Digital tid) / 60 × 365",
+        "formula_total_visits_week_eq": "Brukere × Besøk per uke",
+        "formula_replaced_visits_week_eq": "Totale besøk × Digitaliseringsgrad",
+        "formula_saved_travel_year_eq": "Erstattede besøk/uke × Reisetid / 60 × 52",
+        "formula_total_time_saved_year_eq": "Erstattede besøk/uke × (Tid hos bruker + Reisetid − Digital tid) / 60 × 52",
+        "formula_gross_saving_eq": "Timer spart/år × Timekostnad",
+        "formula_net_gain_eq": "Brutto − (Brukere × Lisens × 12)",
+        "formula_payback_eq": "Investering / Månedlig netto gevinst",
+        "formula_fte_eq": "Timer spart/år / 1 695 arbeidstimer",
+        
         // Economy
         "economy": "Økonomi",
         "payback_time": "Payback-tid",
@@ -109,7 +134,7 @@ const translations = {
         "share_calculation": "Del beregning",
         "link_copied": "Lenke kopiert!",
         
-        // Formula
+        // Formula toggle
         "show_formula": "Vis beregningsformel",
         
         // User selection overlay
@@ -151,7 +176,7 @@ const translations = {
         "yearly_net_gain": "Yearly Net Gain",
         "yearly_net_gain_tooltip_hjemmebesok": "Total estimated savings per year minus annual license cost",
         "yearly_net_gain_tooltip_tilsyn": "Gross savings minus annual cost for the solution (license, hardware, operations)",
-        "currency_nok": "NOK",
+        "currency_nok": "GBP",
         "months": "months",
         "hours": "hours",
         "visits": "visits",
@@ -163,6 +188,31 @@ const translations = {
         "more_residents": "more residents",
         "minutes": "min",
         "percent": "%",
+
+        // Formula
+        "formula_avoided_checks": "Avoided checks/day",
+        "formula_hours_saved": "Hours saved/year",
+        "formula_gross_saving": "Annual gross savings",
+        "formula_net_gain": "Annual net gain",
+        "formula_payback": "Payback time",
+        "formula_fte": "Freed FTEs",
+        "formula_total_visits_week": "Total visits per week",
+        "formula_replaced_visits_week": "Replaced visits per week",
+        "formula_saved_travel_year": "Saved travel time per year",
+        "formula_total_time_saved_year": "Total time saved per year",
+
+        "formula_avoided_checks_eq": "Users × Checks/day × Digitalization degree",
+        "formula_avoided_checks_eq_sykehjem": "Residents × Checks/day × Digitalization degree",
+        "formula_hours_saved_eq_hjemmeboende": "Avoided checks/day × (Physical time + Driving time − Digital time) / 60 × 365",
+        "formula_hours_saved_eq_sykehjem": "Avoided checks/day × (Physical − Digital time) / 60 × 365",
+        "formula_total_visits_week_eq": "Users × Visits per week",
+        "formula_replaced_visits_week_eq": "Total visits × Digitalization degree",
+        "formula_saved_travel_year_eq": "Replaced visits/week × Travel time / 60 × 52",
+        "formula_total_time_saved_year_eq": "Replaced visits/week × (Time with user + Travel time − Digital time) / 60 × 52",
+        "formula_gross_saving_eq": "Hours saved/year × Hourly rate",
+        "formula_net_gain_eq": "Gross − (Users × License × 12)",
+        "formula_payback_eq": "Investment / Monthly net gain",
+        "formula_fte_eq": "Hours saved/year / 1,695 working hours",
         
         // Economy
         "economy": "Economy",
@@ -252,7 +302,7 @@ const translations = {
         "share_calculation": "Share calculation",
         "link_copied": "Link copied!",
         
-        // Formula
+        // Formula toggle
         "show_formula": "Show calculation formula",
         
         // User selection overlay
@@ -294,7 +344,7 @@ const translations = {
         "yearly_net_gain": "Årlig nettovinst",
         "yearly_net_gain_tooltip_hjemmebesok": "Total uppskattad besparing per år minus årlig licenskostnad",
         "yearly_net_gain_tooltip_tilsyn": "Bruttobesparing minus årlig kostnad för lösningen (licens, hårdvara, drift)",
-        "currency_nok": "NOK", // Assuming we keep NOK as currency, or should it be SEK? Let's use SEK dynamically or just keep the string. We'll set "SEK".
+        "currency_nok": "SEK",
         "months": "månader",
         "hours": "timmar",
         "visits": "besök",
@@ -306,6 +356,31 @@ const translations = {
         "more_residents": "fler boende",
         "minutes": "min",
         "percent": "%",
+
+        // Formula
+        "formula_avoided_checks": "Undvikna tillsyn/dag",
+        "formula_hours_saved": "Timmar sparade/år",
+        "formula_gross_saving": "Årlig bruttobesparing",
+        "formula_net_gain": "Årlig nettovinst",
+        "formula_payback": "Återbetalningstid",
+        "formula_fte": "Frigjorda heltidstjänster",
+        "formula_total_visits_week": "Totalt antal besök per vecka",
+        "formula_replaced_visits_week": "Ersatta besök per vecka",
+        "formula_saved_travel_year": "Sparad restid per år",
+        "formula_total_time_saved_year": "Total sparad tid per år",
+
+        "formula_avoided_checks_eq": "Användare × Tillsyn/dag × Digitaliseringsgrad",
+        "formula_avoided_checks_eq_sykehjem": "Boende × Tillsyn/dag × Digitaliseringsgrad",
+        "formula_hours_saved_eq_hjemmeboende": "Undvikna tillsyn/dag × (Fysisk tid + Körtid − Digital tid) / 60 × 365",
+        "formula_hours_saved_eq_sykehjem": "Undvikna tillsyn/dag × (Fysisk − Digital tid) / 60 × 365",
+        "formula_total_visits_week_eq": "Användare × Besök per vecka",
+        "formula_replaced_visits_week_eq": "Totalt antal besök × Digitaliseringsgrad",
+        "formula_saved_travel_year_eq": "Ersatta besök/vecka × Restid / 60 × 52",
+        "formula_total_time_saved_year_eq": "Ersatta besök/vecka × (Tid hos användare + Restid − Digital tid) / 60 × 52",
+        "formula_gross_saving_eq": "Timmar sparade/år × Timkostnad",
+        "formula_net_gain_eq": "Brutto − (Användare × Licens × 12)",
+        "formula_payback_eq": "Investering / Månatlig nettovinst",
+        "formula_fte_eq": "Timmar sparade/år / 1 695 arbetstimmar",
         
         // Economy
         "economy": "Ekonomi",
@@ -381,13 +456,13 @@ const translations = {
         "municipal_hourly_rate": "Kommunal timkostnad",
         "municipal_hourly_rate_tooltip": "Genomsnittlig timkostnad för kommunanställda inklusive alla kostnader",
         "monthly_license_per_user": "Månatlig licens per användare",
-        "monthly_license_per_user_tooltip": "Månatlig licenskostnad per användare för den digitala lösningen. Riktpris – kan variera beroende på avtal och kontraktstyp",
+        "monthly_license_per_user_tooltip": "Månatlig licenskostnad per användare för den digitala lösningen. Riktpris – kan variera beroende på avtal og kontraktstyp",
         "investment_per_user": "Investering per användare",
-        "investment_per_user_tooltip": "Engångsinvestering per användare (surfplatta, installation, utbildning). Riktpris – kan variera beroende på avtal och kontraktstyp",
+        "investment_per_user_tooltip": "Engångsinvestering per användare (surfplatta, installation, utbildning). Riktpris – kan variera beroende på avtal og kontraktstyp",
         "monthly_license_per_camera": "Månatlig licens per kamera",
-        "monthly_license_per_camera_tooltip": "Månatlig licenskostnad per kamera/enhet för den digitala lösningen. Riktpris – kan variera beroende på avtal och kontraktstyp",
+        "monthly_license_per_camera_tooltip": "Månatlig licenskostnad per kamera/enhet för den digitala lösningen. Riktpris – kan variera beroende på avtal og kontraktstyp",
         "investment_per_camera": "Investering per kamera",
-        "investment_per_camera_tooltip": "Engångsinvestering per kamera/enhet (hårdvara, installation). Riktpris – kan variera beroende på avtal och kontraktstyp",
+        "investment_per_camera_tooltip": "Engångsinvestering per kamera/enhet (hårdvara, installation). Riktpris – kan variera beroende på avtal og kontraktstyp",
         
         // Actions
         "download_pdf": "Ladda ner som PDF",
@@ -395,12 +470,12 @@ const translations = {
         "share_calculation": "Dela beräkning",
         "link_copied": "Länk kopierad!",
         
-        // Formula
+        // Formula toggle
         "show_formula": "Visa beräkningsformel",
         
         // User selection overlay
         "how_many_users": "Hur många användare får tjänsten?",
-        "choose_user_count": "Välj antal användare för att starta beräkningen",
+        "choose_user_count": "Välj antal användare för att starte beräkningen",
         "custom": "Anpassad",
         "enter_amount": "Ange antal...",
         "confirm": "Bekräfta",
