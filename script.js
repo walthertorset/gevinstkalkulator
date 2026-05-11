@@ -370,81 +370,81 @@ if (exportPdfBtn) exportPdfBtn.addEventListener('click', function() {
 
     let pdfInputRows;
     if (isHjemmebesok) {
-        pdfInputRows = `<tr><td style="padding: 8px 0; color: #666;">${t('number_of_users')}</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} ${t('users')}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${t('visits_per_week')}</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} ${t('visits')}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${t('time_per_visit')}</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} ${t('minutes')}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${t('travel_time_roundtrip')}</td><td style="text-align: right; font-weight: 600;">${reisetidSlider.value} ${t('minutes')}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${t('time_per_digital_visit')}</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} ${t('minutes')}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${t('share_visits_digitalized')}</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}${t('percent')}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${t('municipal_hourly_rate')}</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} ${t('currency_nok')}</td></tr>
-           ${lisensPerBruker ? `<tr><td style="padding: 8px 0; color: #666;">${t('monthly_license_per_user')}</td><td style="text-align: right; font-weight: 600;">${lisensPerBruker.value} ${t('currency_nok')}</td></tr>` : ''}
-           ${investeringPerBruker ? `<tr><td style="padding: 8px 0; color: #666;">${t('investment_per_user')}</td><td style="text-align: right; font-weight: 600;">${formatNumber(investeringPerBruker.value)} ${t('currency_nok')}</td></tr>` : ''}`;
+        pdfInputRows = `<tr><td style="padding: 6px 0; color: #64748b;">${t('number_of_users')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${antallBrukere.value} ${t('users')}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('visits_per_week')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${besokPerUke.value} ${t('visits')}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('time_per_visit')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${tidPerBesok.value} ${t('minutes')}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('travel_time_roundtrip')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${reisetidSlider.value} ${t('minutes')}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('time_per_digital_visit')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${tidPerDigitaltBesok.value} ${t('minutes')}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('share_visits_digitalized')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${digitaliseringsgrad.value}${t('percent')}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('municipal_hourly_rate')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${timekostnad.value} ${t('currency_nok')}</td></tr>
+           ${lisensPerBruker ? `<tr><td style="padding: 6px 0; color: #64748b;">${t('monthly_license_per_user')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${lisensPerBruker.value} ${t('currency_nok')}</td></tr>` : ''}
+           ${investeringPerBruker ? `<tr><td style="padding: 6px 0; color: #64748b;">${t('investment_per_user')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${formatNumber(investeringPerBruker.value)} ${t('currency_nok')}</td></tr>` : ''}`;
     } else if (isDailyModel) {
         const beboereText = isSykehjem ? t('residents') : t('users');
         const tilsynDagText = isSykehjem ? t('checks_per_day_sykehjem') : t('checks_per_day_hjemmeboende');
         
-        pdfInputRows = `<tr><td style="padding: 8px 0; color: #666;">${t('number_of_users')}</td><td style="text-align: right; font-weight: 600;">${antallBrukere.value} ${beboereText}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${tilsynDagText}</td><td style="text-align: right; font-weight: 600;">${besokPerUke.value} ${t('checks')}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${t('time_per_physical_check')}</td><td style="text-align: right; font-weight: 600;">${tidPerBesok.value} ${t('minutes')}</td></tr>
-           ${kjoretidSlider ? `<tr><td style="padding: 8px 0; color: #666;">${t('driving_time_roundtrip')}</td><td style="text-align: right; font-weight: 600;">${kjoretidSlider.value} ${t('minutes')}</td></tr>` : ''}
-           <tr><td style="padding: 8px 0; color: #666;">${t('time_per_digital_check')}</td><td style="text-align: right; font-weight: 600;">${tidPerDigitaltBesok.value} ${t('minutes')}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${t('share_checks_digitalized')}</td><td style="text-align: right; font-weight: 600;">${digitaliseringsgrad.value}${t('percent')}</td></tr>
-           <tr><td style="padding: 8px 0; color: #666;">${t('municipal_hourly_rate')}</td><td style="text-align: right; font-weight: 600;">${timekostnad.value} ${t('currency_nok')}</td></tr>
-           ${lisensPerKamera ? `<tr><td style="padding: 8px 0; color: #666;">${t('monthly_license_per_camera')}</td><td style="text-align: right; font-weight: 600;">${lisensPerKamera.value} ${t('currency_nok')}</td></tr>` : ''}
-           ${investeringPerKamera ? `<tr><td style="padding: 8px 0; color: #666;">${t('investment_per_camera')}</td><td style="text-align: right; font-weight: 600;">${formatNumber(investeringPerKamera.value)} ${t('currency_nok')}</td></tr>` : ''}`;
+        pdfInputRows = `<tr><td style="padding: 6px 0; color: #64748b;">${t('number_of_users')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${antallBrukere.value} ${beboereText}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${tilsynDagText}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${besokPerUke.value} ${t('checks')}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('time_per_physical_check')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${tidPerBesok.value} ${t('minutes')}</td></tr>
+           ${kjoretidSlider ? `<tr><td style="padding: 6px 0; color: #64748b;">${t('driving_time_roundtrip')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${kjoretidSlider.value} ${t('minutes')}</td></tr>` : ''}
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('time_per_digital_check')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${tidPerDigitaltBesok.value} ${t('minutes')}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('share_checks_digitalized')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${digitaliseringsgrad.value}${t('percent')}</td></tr>
+           <tr><td style="padding: 6px 0; color: #64748b;">${t('municipal_hourly_rate')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${timekostnad.value} ${t('currency_nok')}</td></tr>
+           ${lisensPerKamera ? `<tr><td style="padding: 6px 0; color: #64748b;">${t('monthly_license_per_camera')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${lisensPerKamera.value} ${t('currency_nok')}</td></tr>` : ''}
+           ${investeringPerKamera ? `<tr><td style="padding: 6px 0; color: #64748b;">${t('investment_per_camera')}</td><td style="text-align: right; font-weight: 600; color: #1e293b;">${formatNumber(investeringPerKamera.value)} ${t('currency_nok')}</td></tr>` : ''}`;
     }
 
     const getVal = (id) => { const el = document.getElementById(id); return el ? el.textContent : '0'; };
 
     let pdfResultRows;
     if (isHjemmebesok) {
-        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">${t('yearly_net_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} ${t('currency_nok')}</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('economy')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('payback_time')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('paybackTid')} ${t('months')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('five_year_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('femAarsGevinst')} ${t('currency_nok')}</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('operational_benefit')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('total_hours_saved')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} ${t('hours')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('saved_travel_time')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('spartReisetidAar')} ${t('hours')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('replaced_physical_visits')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('erstattedeBesokAar')} ${t('visits')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('freed_fte')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} ${t('fte')}</td></tr>`;
+        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.2);"><td style="padding: 10px 0; font-size: 16px;">${t('yearly_net_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 24px;">${arligGevinst.textContent} ${t('currency_nok')}</td></tr>
+           <tr><td colspan="2" style="padding: 12px 0 4px; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('economy')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('payback_time')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('paybackTid')} ${t('months')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('five_year_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('femAarsGevinst')} ${t('currency_nok')}</td></tr>
+           <tr><td colspan="2" style="padding: 12px 0 4px; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('operational_benefit')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('total_hours_saved')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('timerSpartAar')} ${t('hours')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('saved_travel_time')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('spartReisetidAar')} ${t('hours')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('replaced_physical_visits')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('erstattedeBesokAar')} ${t('visits')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('freed_fte')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('frigjorteAarsverk')} ${t('fte')}</td></tr>`;
     } else if (isDailyModel) {
-        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.3);"><td style="padding: 15px 0; font-size: 18px;">${t('yearly_net_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 28px;">${arligGevinst.textContent} ${t('currency_nok')}</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('economy')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('payback_time')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('paybackTid')} ${t('months')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('five_year_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('femAarsGevinst')} ${t('currency_nok')}</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('capacity')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('freed_fte')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('frigjorteAarsverk')} ${t('fte')}</td></tr>
-           <tr><td style="padding: 8px 0;">${t('increased_capacity')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('ekstraKapasitet')} ${isSykehjem ? t('more_residents') : t('more_users')}</td></tr>
-           <tr><td colspan="2" style="padding: 14px 0 4px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('activity')}</td></tr>
+        pdfResultRows = `<tr style="border-bottom: 1px solid rgba(255,255,255,0.2);"><td style="padding: 10px 0; font-size: 16px;">${t('yearly_net_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 24px;">${arligGevinst.textContent} ${t('currency_nok')}</td></tr>
+           <tr><td colspan="2" style="padding: 12px 0 4px; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('economy')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('payback_time')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('paybackTid')} ${t('months')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('five_year_gain')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('femAarsGevinst')} ${t('currency_nok')}</td></tr>
+           <tr><td colspan="2" style="padding: 12px 0 4px; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('capacity')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('freed_fte')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('frigjorteAarsverk')} ${t('fte')}</td></tr>
+           <tr><td style="padding: 6px 0;">${t('increased_capacity')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('ekstraKapasitet')} ${isSykehjem ? t('more_residents') : t('more_users')}</td></tr>
+           <tr><td colspan="2" style="padding: 12px 0 4px; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.8;">${t('activity')}</td></tr>
            ${isHjemmeboende
-               ? `<tr><td style="padding: 8px 0;">${t('hours_saved_car')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartBilAar')} ${t('hours')}</td></tr>`
-               : `<tr><td style="padding: 8px 0;">${t('avoided_physical_checks')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('unngaatteTilsynAar')} ${t('checks')}</td></tr>`}
-           <tr><td style="padding: 8px 0;">${t('hours_saved_year')}</td><td style="text-align: right; font-weight: 700; font-size: 18px;">${getVal('timerSpartAar')} ${t('hours')}</td></tr>`;
+               ? `<tr><td style="padding: 6px 0;">${t('hours_saved_car')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('timerSpartBilAar')} ${t('hours')}</td></tr>`
+               : `<tr><td style="padding: 6px 0;">${t('avoided_physical_checks')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('unngaatteTilsynAar')} ${t('checks')}</td></tr>`}
+           <tr><td style="padding: 6px 0;">${t('hours_saved_year')}</td><td style="text-align: right; font-weight: 700; font-size: 15px;">${getVal('timerSpartAar')} ${t('hours')}</td></tr>`;
     }
 
     pdfContent.innerHTML = `
-        <div style="font-family: 'Segoe UI', sans-serif; padding: 40px; max-width: 800px;">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #4ECDC4; margin: 0;">${document.querySelector('header h1') ? document.querySelector('header h1').textContent : t('calculated_gain')}</h1>
-                <p style="color: #666; margin: 5px 0;">${t('pdf_subtitle')}</p>
-                <p style="color: #999; font-size: 12px;">${new Date().toLocaleDateString(currentLang === 'en' ? 'en-US' : (currentLang === 'sv' ? 'sv-SE' : 'no-NO'))}</p>
+        <div style="font-family: 'Segoe UI', Helvetica, Arial, sans-serif; padding: 20px 40px; max-width: 800px; color: #333; background: white;">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <h1 style="color: #4ECDC4; margin: 0; font-size: 22px; line-height: 1.2;">${document.querySelector('header h1') ? document.querySelector('header h1').textContent : t('calculated_gain')}</h1>
+                <p style="color: #64748b; margin: 8px 0 4px 0; font-size: 14px;">${t('pdf_subtitle')}</p>
+                <p style="color: #94a3b8; font-size: 11px;">${new Date().toLocaleDateString(currentLang === 'en' ? 'en-US' : (currentLang === 'sv' ? 'sv-SE' : 'no-NO'))}</p>
             </div>
 
-            <div style="background: #f5f7fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                <h2 style="color: #2c3e50; font-size: 16px; margin: 0 0 15px 0;">${t('your_assumptions')}</h2>
-                <table style="width: 100%; border-collapse: collapse;">
+            <div style="background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0; page-break-inside: avoid;">
+                <h2 style="color: #1e293b; font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.05em;">${t('your_assumptions')}</h2>
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                     ${pdfInputRows}
                 </table>
             </div>
 
-            <div style="background: linear-gradient(135deg, #4ECDC4, #3DB8B0); padding: 25px; border-radius: 8px; color: white;">
-                <h2 style="font-size: 16px; margin: 0 0 15px 0;">${t('calculated_gain')}</h2>
-                <table style="width: 100%; border-collapse: collapse;">
+            <div style="background: #4ECDC4; padding: 20px; border-radius: 12px; color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05); page-break-inside: avoid;">
+                <h2 style="font-size: 14px; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9;">${t('calculated_gain')}</h2>
+                <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
                     ${pdfResultRows}
                 </table>
             </div>
 
-            <p style="text-align: center; color: #999; font-size: 11px; margin-top: 30px;">
+            <p style="text-align: center; color: #94a3b8; font-size: 10px; margin-top: 30px; line-height: 1.5;">
                 ${t('footer_text')}
             </p>
         </div>
