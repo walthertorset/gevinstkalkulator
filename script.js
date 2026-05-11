@@ -539,6 +539,49 @@ function t(key) {
     return key;
 }
 
+// Currency exchange rate for GBP (approximate NOK to GBP)
+const EXCHANGE_RATE_GBP = 14.0;
+
+// Default values in NOK
+const NOK_DEFAULTS = {
+    timekostnad: 600,
+    lisensPerKamera: 500,
+    investeringPerKamera: 5000,
+    lisensPerBruker: 300,
+    investeringPerBruker: 5000
+};
+
+// Update economic defaults based on current language/currency
+function updateEconomicDefaults() {
+    const isGBP = currentLang === 'en';
+    const rate = isGBP ? EXCHANGE_RATE_GBP : 1.0;
+
+    const inputs = [
+        { id: 'timekostnad', default: NOK_DEFAULTS.timekostnad },
+        { id: 'lisensPerKamera', default: NOK_DEFAULTS.lisensPerKamera },
+        { id: 'investeringPerKamera', default: NOK_DEFAULTS.investeringPerKamera },
+        { id: 'lisensPerBruker', default: NOK_DEFAULTS.lisensPerBruker },
+        { id: 'investeringPerBruker', default: NOK_DEFAULTS.investeringPerBruker }
+    ];
+
+    inputs.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el) {
+            // Save original min/max if not already saved
+            if (!el.hasAttribute('data-orig-min')) el.setAttribute('data-orig-min', el.min);
+            if (!el.hasAttribute('data-orig-max')) el.setAttribute('data-orig-max', el.max);
+
+            const origMin = parseInt(el.getAttribute('data-orig-min'));
+            const origMax = parseInt(el.getAttribute('data-orig-max'));
+
+            // Update value and attributes
+            el.min = Math.round(origMin / rate);
+            el.max = Math.round(origMax / rate);
+            el.value = Math.round(item.default / rate);
+        }
+    });
+}
+
 function translatePage() {
     if (typeof translations === 'undefined') return;
     
@@ -562,6 +605,9 @@ function translatePage() {
     
     // Update HTML lang attribute
     document.documentElement.lang = currentLang;
+
+    // Update economic defaults for the selected currency
+    updateEconomicDefaults();
 
     // Refresh calculation to update formatted numbers and currency
     calculate();
